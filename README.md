@@ -1,16 +1,35 @@
 # stml_careconnect
 
-A new Flutter project.
+CareConnect (STML CareConnect)
+
+CareConnect is a mobile app prototype built with **Flutter** as part of an early implementation for the STML assignment.  
+It includes core screens like Welcome, Login, Sign Up, and Home as a foundation for further development.
+
+Overview
+
+This project demonstrates:
+
+- A Flutter mobile app structure  
+- Basic screen layouts (Welcome, Login, Sign Up, Home)  
+- Navigation between screens  
+- Light and dark theme support  
+- Placeholder UI with clean starting point for additional screens
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+Make sure you have the following installed:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter SDK  
+- Git  
+- An Android emulator or iOS simulator (or a real device)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+### Run Locally
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/umgcTeam10/careconnect2026.git
