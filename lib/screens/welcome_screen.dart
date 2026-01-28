@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
-import 'signup_screen.dart';
+import '../app/app_routes.dart';
+import '../widgets/app_logo_badge.dart';
+import '../widgets/feature_row.dart';
+import '../widgets/primary_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -8,47 +10,116 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Welcome to CareConnect',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
-
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const LoginScreen()),
-                  );
-                },
-                child: const SizedBox(
-                  width: double.infinity,
-                  child: Text('Login', textAlign: TextAlign.center),
-                ),
-              ),
-
-              const SizedBox(height: 12),
-
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const SignUpScreen()),
-                  );
-                },
-                child: const SizedBox(
-                  width: double.infinity,
-                  child: Text('Sign Up', textAlign: TextAlign.center),
-                ),
-              ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF0F1F3D),
+              Color(0xFF0B1630),
+              Color(0xFF0A1228),
             ],
+          ),
+        ),
+        child: SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 520),
+                          child: Container(
+                            padding: const EdgeInsets.all(24),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.08),
+                              borderRadius: BorderRadius.circular(24),
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.12),
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                AppLogoBadge.square(),
+                                const SizedBox(height: 16),
+                                const Text(
+                                  'CareConnect',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  'Compassionate care coordination made simple',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 14,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 20),
+                                const FeatureRow(
+                                  icon: Icons.people_alt_outlined,
+                                  title: 'Stay Connected',
+                                  description:
+                                      'Coordinate care seamlessly between caregivers and loved ones',
+                                ),
+                                const SizedBox(height: 16),
+                                const FeatureRow(
+                                  icon: Icons.verified_user_outlined,
+                                  title: 'Secure & Private',
+                                  description:
+                                      'Your health information is protected with industry-leading security',
+                                ),
+                                const SizedBox(height: 16),
+                                const FeatureRow(
+                                  icon: Icons.favorite_border,
+                                  title: 'Personalized Care',
+                                  description:
+                                      'Track health, manage tasks, and maintain care plans all in one place',
+                                ),
+                                const SizedBox(height: 24),
+                                PrimaryButton(
+                                  label: 'Get Started',
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      AppRoutes.login,
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 24, bottom: 12),
+                        child: Text(
+                          'By continuing, you agree to our Terms of Service and Privacy Policy',
+                          style: TextStyle(
+                            color: Colors.white60,
+                            fontSize: 12,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),
