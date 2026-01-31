@@ -185,7 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: () {
                                 Navigator.pushReplacementNamed(
                                   context,
-                                  AppRoutes.dashboard,
+                                  AppRoutes.signup,
                                 );
                               },
                             ),
@@ -195,7 +195,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 const Text("Don't have an account? "),
                                 TextButton(
-                                  onPressed: () => _showNotImplemented(context),
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      AppRoutes.signup,
+                                    );
+                                  },
                                   child: const Text('Sign up'),
                                 ),
                               ],
