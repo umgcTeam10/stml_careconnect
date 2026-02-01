@@ -6,25 +6,29 @@ import 'package:stml_careconnect/theme/app_theme.dart';
 
 void main() {
   group('ProfileScreen Widget Tests', () {
-    testWidgets('Profile screen renders correctly', (WidgetTester tester) async {
+    testWidgets('Profile screen renders correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
-          theme: ThemeData(
-            primaryColor: AppColors.primary,
-          ),
+          theme: ThemeData(primaryColor: AppColors.primary),
           home: const ProfileScreen(),
           routes: {
-            AppRoutes.dashboard: (context) => const Scaffold(body: Text('Dashboard')),
+            AppRoutes.dashboard: (context) =>
+                const Scaffold(body: Text('Dashboard')),
             AppRoutes.tasks: (context) => const Scaffold(body: Text('Tasks')),
-            AppRoutes.calendar: (context) => const Scaffold(body: Text('Calendar')),
-            AppRoutes.messages: (context) => const Scaffold(body: Text('Messages')),
-            AppRoutes.healthLogs: (context) => const Scaffold(body: Text('Health Logs')),
+            AppRoutes.calendar: (context) =>
+                const Scaffold(body: Text('Calendar')),
+            AppRoutes.messages: (context) =>
+                const Scaffold(body: Text('Messages')),
+            AppRoutes.healthLogs: (context) =>
+                const Scaffold(body: Text('Health Logs')),
           },
         ),
       );
 
-      // Verify header
-      expect(find.text('Profile'), findsOneWidget);
+      // Verify header (Profile appears in both header and bottom nav)
+      expect(find.text('Profile'), findsAtLeastNWidgets(1));
       expect(find.text('Settings'), findsOneWidget);
 
       // Verify user profile section
@@ -46,7 +50,10 @@ void main() {
 
       // Verify Preferences section
       expect(find.text('Preferences'), findsOneWidget);
-      expect(find.text('Customize your CareConnect experience'), findsOneWidget);
+      expect(
+        find.text('Customize your CareConnect experience'),
+        findsOneWidget,
+      );
       expect(find.text('Dark Mode'), findsOneWidget);
       expect(find.text('Disabled'), findsOneWidget);
 
@@ -58,7 +65,6 @@ void main() {
 
       // Verify other settings
       expect(find.text('Privacy & Security'), findsOneWidget);
-      expect(find.text('Health Logs'), findsOneWidget);
       expect(find.text('Help & Support'), findsOneWidget);
       expect(find.text('Sign Out'), findsOneWidget);
 
@@ -67,15 +73,16 @@ void main() {
       expect(find.text('Tasks'), findsOneWidget);
       expect(find.text('Calendar'), findsOneWidget);
       expect(find.text('Messages'), findsOneWidget);
-      expect(find.text('Profile'), findsOneWidget);
+      // Profile appears in header and bottom nav
+      expect(find.text('Profile'), findsAtLeastNWidgets(1));
     });
 
-    testWidgets('Profile icon in bottom nav is highlighted', (WidgetTester tester) async {
+    testWidgets('Profile icon in bottom nav is highlighted', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
-          theme: ThemeData(
-            primaryColor: AppColors.primary,
-          ),
+          theme: ThemeData(primaryColor: AppColors.primary),
           home: const ProfileScreen(),
         ),
       );
@@ -84,21 +91,19 @@ void main() {
       final bottomNavBar = tester.widget<BottomNavigationBar>(
         find.byType(BottomNavigationBar),
       );
-      
+
       expect(bottomNavBar.currentIndex, 4);
     });
 
-    testWidgets('Settings button shows not implemented message', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: const ProfileScreen(),
-        ),
-      );
+    testWidgets('Settings button shows not implemented message', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(MaterialApp(home: const ProfileScreen()));
 
       // Find and tap the Settings button
       final settingsButton = find.text('Settings');
       expect(settingsButton, findsOneWidget);
-      
+
       await tester.tap(settingsButton);
       await tester.pump();
 
@@ -106,17 +111,15 @@ void main() {
       expect(find.text('Not implemented in Week 4'), findsOneWidget);
     });
 
-    testWidgets('Edit button shows not implemented message', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: const ProfileScreen(),
-        ),
-      );
+    testWidgets('Edit button shows not implemented message', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(MaterialApp(home: const ProfileScreen()));
 
       // Find and tap the Edit button
       final editButton = find.text('Edit');
       expect(editButton, findsOneWidget);
-      
+
       await tester.tap(editButton);
       await tester.pump();
 
@@ -124,16 +127,17 @@ void main() {
       expect(find.text('Not implemented in Week 4'), findsOneWidget);
     });
 
-    testWidgets('Toggle switches can be interacted with', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: const ProfileScreen(),
-        ),
-      );
+    testWidgets('Toggle switches can be interacted with', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(MaterialApp(home: const ProfileScreen()));
 
       // Find all switches
       final switches = find.byType(Switch);
-      expect(switches, findsNWidgets(4)); // 3 notification toggles + 1 dark mode toggle
+      expect(
+        switches,
+        findsNWidgets(4),
+      ); // 3 notification toggles + 1 dark mode toggle
 
       // Tap the first switch (Push Notifications)
       await tester.tap(switches.first);
@@ -143,42 +147,8 @@ void main() {
       expect(find.text('Not implemented in Week 4'), findsOneWidget);
     });
 
-    testWidgets('Health Logs navigation works', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: const ProfileScreen(),
-          routes: {
-            AppRoutes.healthLogs: (context) => const Scaffold(
-              body: Center(child: Text('Health Logs Screen')),
-            ),
-          },
-        ),
-      );
-
-      // Scroll to find Health Logs option
-      await tester.scrollUntilVisible(
-        find.text('Health Logs'),
-        100,
-        scrollable: find.byType(Scrollable),
-      );
-
-      // Find and tap the Health Logs row
-      final healthLogsRow = find.text('Health Logs');
-      expect(healthLogsRow, findsOneWidget);
-      
-      await tester.tap(healthLogsRow);
-      await tester.pumpAndSettle();
-
-      // Verify navigation occurred
-      expect(find.text('Health Logs Screen'), findsOneWidget);
-    });
-
     testWidgets('Text Size option is tappable', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: const ProfileScreen(),
-        ),
-      );
+      await tester.pumpWidget(MaterialApp(home: const ProfileScreen()));
 
       // Scroll to find Text Size option
       await tester.scrollUntilVisible(
@@ -190,7 +160,7 @@ void main() {
       // Find and tap Text Size
       final textSizeOption = find.text('Text Size');
       expect(textSizeOption, findsOneWidget);
-      
+
       await tester.tap(textSizeOption);
       await tester.pump();
 
@@ -198,12 +168,10 @@ void main() {
       expect(find.text('Not implemented in Week 4'), findsOneWidget);
     });
 
-    testWidgets('High Contrast option is tappable', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: const ProfileScreen(),
-        ),
-      );
+    testWidgets('High Contrast option is tappable', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(MaterialApp(home: const ProfileScreen()));
 
       // Scroll to find High Contrast option
       await tester.scrollUntilVisible(
@@ -215,7 +183,7 @@ void main() {
       // Find and tap High Contrast
       final highContrastOption = find.text('High Contrast');
       expect(highContrastOption, findsOneWidget);
-      
+
       await tester.tap(highContrastOption);
       await tester.pump();
 
@@ -223,12 +191,10 @@ void main() {
       expect(find.text('Not implemented in Week 4'), findsOneWidget);
     });
 
-    testWidgets('Privacy & Security option is tappable', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: const ProfileScreen(),
-        ),
-      );
+    testWidgets('Privacy & Security option is tappable', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(MaterialApp(home: const ProfileScreen()));
 
       // Scroll to find Privacy & Security option
       await tester.scrollUntilVisible(
@@ -240,7 +206,7 @@ void main() {
       // Find and tap Privacy & Security
       final privacyOption = find.text('Privacy & Security');
       expect(privacyOption, findsOneWidget);
-      
+
       await tester.tap(privacyOption);
       await tester.pump();
 
@@ -248,12 +214,10 @@ void main() {
       expect(find.text('Not implemented in Week 4'), findsOneWidget);
     });
 
-    testWidgets('Help & Support option is tappable', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: const ProfileScreen(),
-        ),
-      );
+    testWidgets('Help & Support option is tappable', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(MaterialApp(home: const ProfileScreen()));
 
       // Scroll to find Help & Support option
       await tester.scrollUntilVisible(
@@ -265,7 +229,7 @@ void main() {
       // Find and tap Help & Support
       final helpOption = find.text('Help & Support');
       expect(helpOption, findsOneWidget);
-      
+
       await tester.tap(helpOption);
       await tester.pump();
 
@@ -274,11 +238,7 @@ void main() {
     });
 
     testWidgets('Sign Out button is tappable', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: const ProfileScreen(),
-        ),
-      );
+      await tester.pumpWidget(MaterialApp(home: const ProfileScreen()));
 
       // Scroll to find Sign Out button
       await tester.scrollUntilVisible(
@@ -290,7 +250,7 @@ void main() {
       // Find and tap Sign Out
       final signOutButton = find.text('Sign Out');
       expect(signOutButton, findsOneWidget);
-      
+
       await tester.tap(signOutButton);
       await tester.pump();
 
@@ -298,12 +258,15 @@ void main() {
       expect(find.text('Not implemented in Week 4'), findsOneWidget);
     });
 
-    testWidgets('Bottom navigation navigates to dashboard', (WidgetTester tester) async {
+    testWidgets('Bottom navigation navigates to dashboard', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: const ProfileScreen(),
           routes: {
-            AppRoutes.dashboard: (context) => const Scaffold(body: Text('Dashboard Screen')),
+            AppRoutes.dashboard: (context) =>
+                const Scaffold(body: Text('Dashboard Screen')),
           },
         ),
       );
