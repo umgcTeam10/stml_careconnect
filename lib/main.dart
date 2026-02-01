@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'app/app_routes.dart';
 import 'screens/calendar_screen.dart';
 import 'screens/dashboard_screen.dart';
+import 'screens/health_logs_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/messages_screen.dart';
 import 'screens/notifications_screen.dart';
@@ -36,6 +37,8 @@ class CareConnectApp extends StatelessWidget {
         AppRoutes.messages: (context) => const MessagesScreen(),
         AppRoutes.profile: (context) => const ProfileScreen(),
         AppRoutes.notifications: (context) => const NotificationsScreen(),
+        AppRoutes.healthLogs: (context) => const HealthLogsScreen(),
+
       },
     );
   }

@@ -17,9 +17,9 @@ class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   void _showNotImplemented(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Not implemented in Week 4')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Not implemented in Week 4')));
   }
 
   void _onNavTap(BuildContext context, int index) {
@@ -37,6 +37,9 @@ class DashboardScreen extends StatelessWidget {
         return;
       case 4:
         Navigator.pushReplacementNamed(context, AppRoutes.profile);
+        return;
+      case 5:
+        Navigator.pushReplacementNamed(context, AppRoutes.healthLogs);
         return;
     }
   }
@@ -110,7 +113,10 @@ class DashboardScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 12),
                               ElevatedButton(
-                                onPressed: () => _showNotImplemented(context),
+                                onPressed: () => Navigator.pushNamed(
+                                  context,
+                                  AppRoutes.healthLogs,
+                                ),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primary,
                                   foregroundColor: Colors.white,
@@ -391,10 +397,7 @@ class DashboardScreen extends StatelessWidget {
                         const SizedBox(height: 4),
                         const Text(
                           'Recent vitals and measurements',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: _mutedText,
-                          ),
+                          style: TextStyle(fontSize: 12, color: _mutedText),
                         ),
                         const SizedBox(height: 12),
                         const _SummaryItem(
@@ -494,8 +497,10 @@ class _DashboardHeader extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.18),
                     borderRadius: BorderRadius.circular(12),
@@ -510,7 +515,11 @@ class _DashboardHeader extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                const Icon(Icons.home_outlined, color: Colors.white70, size: 18),
+                const Icon(
+                  Icons.home_outlined,
+                  color: Colors.white70,
+                  size: 18,
+                ),
                 const SizedBox(width: 6),
                 const Text(
                   'Home Dashboard',
@@ -606,13 +615,7 @@ class _StatCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 12,
-              color: _mutedText,
-            ),
-          ),
+          Text(label, style: const TextStyle(fontSize: 12, color: _mutedText)),
         ],
       ),
     );
@@ -651,10 +654,7 @@ class _TagChip extends StatelessWidget {
 }
 
 class _InfoRow extends StatelessWidget {
-  const _InfoRow({
-    required this.icon,
-    required this.label,
-  });
+  const _InfoRow({required this.icon, required this.label});
 
   final IconData icon;
   final String label;
@@ -665,13 +665,7 @@ class _InfoRow extends StatelessWidget {
       children: [
         Icon(icon, size: 16, color: _mutedText),
         const SizedBox(width: 8),
-        Text(
-          label,
-          style: const TextStyle(
-            color: _mutedText,
-            fontSize: 13,
-          ),
-        ),
+        Text(label, style: const TextStyle(color: _mutedText, fontSize: 13)),
       ],
     );
   }
@@ -696,8 +690,7 @@ class _TaskItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Icon(Icons.radio_button_unchecked,
-            size: 20, color: _mutedText),
+        const Icon(Icons.radio_button_unchecked, size: 20, color: _mutedText),
         const SizedBox(width: 10),
         Expanded(
           child: Column(
@@ -714,10 +707,7 @@ class _TaskItem extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 time,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: _mutedText,
-                ),
+                style: const TextStyle(fontSize: 12, color: _mutedText),
               ),
             ],
           ),
@@ -776,18 +766,12 @@ class _WellnessItem extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 subtitle,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: _mutedText,
-                ),
+                style: const TextStyle(fontSize: 12, color: _mutedText),
               ),
               const SizedBox(height: 2),
               Text(
                 time,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: _mutedText,
-                ),
+                style: const TextStyle(fontSize: 12, color: _mutedText),
               ),
             ],
           ),
@@ -843,10 +827,7 @@ class _SummaryItem extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 subtitle,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: _mutedText,
-                ),
+                style: const TextStyle(fontSize: 12, color: _mutedText),
               ),
             ],
           ),
@@ -865,10 +846,7 @@ class _SummaryItem extends StatelessWidget {
 }
 
 class _DashboardBottomBar extends StatelessWidget {
-  const _DashboardBottomBar({
-    required this.onTap,
-    required this.onNowTap,
-  });
+  const _DashboardBottomBar({required this.onTap, required this.onNowTap});
 
   final ValueChanged<int> onTap;
   final VoidCallback onNowTap;
@@ -908,17 +886,11 @@ class _DashboardBottomBar extends StatelessWidget {
                         Icon(Icons.schedule, size: 12, color: Colors.white70),
                         Text(
                           '02:00 PM',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 11,
-                          ),
+                          style: TextStyle(color: Colors.white70, fontSize: 11),
                         ),
                         Text(
                           '•',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 11,
-                          ),
+                          style: TextStyle(color: Colors.white70, fontSize: 11),
                         ),
                         Icon(
                           Icons.local_hospital_outlined,
@@ -927,10 +899,7 @@ class _DashboardBottomBar extends StatelessWidget {
                         ),
                         Text(
                           'At clinic',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 11,
-                          ),
+                          style: TextStyle(color: Colors.white70, fontSize: 11),
                         ),
                       ],
                     ),
@@ -964,7 +933,7 @@ class _DashboardBottomBar extends StatelessWidget {
               currentIndex: 0,
               type: BottomNavigationBarType.fixed,
               selectedItemColor: AppColors.primary,
-            unselectedItemColor: _mutedText,
+              unselectedItemColor: _mutedText,
               backgroundColor: Colors.white,
               elevation: 0,
               onTap: onTap,
