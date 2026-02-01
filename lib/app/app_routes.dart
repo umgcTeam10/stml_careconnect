@@ -8,4 +8,5 @@ class AppRoutes {
   static const messages = '/messages';
   static const profile = '/profile';
   static const notifications = '/notifications';
+  static const healthLogs = '/health_logs'; //
 }
