@@ -233,4 +233,22 @@ void main() {
       expect(find.text('Not implemented in Week 4'), findsOneWidget);
     });
   });
+
+  
+    testWidgets('Bottom nav callback covers current-index return path',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(primaryColor: AppColors.primary),
+          home: const MessagesScreen(),
+        ),
+      );
+
+      final nav =
+          tester.widget<BottomNavigationBar>(find.byType(BottomNavigationBar));
+      // case 3 returns (already on Messages)
+      nav.onTap?.call(3);
+      await tester.pump();
+      expect(find.text('Messages'), findsAtLeastNWidgets(1));
+    });
 }

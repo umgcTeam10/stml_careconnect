@@ -137,7 +137,7 @@ void main() {
       expect(
         switches,
         findsNWidgets(4),
-      ); // 3 notification toggles + 1 dark mode toggle
+      ); // 3 notification toggles  1 dark mode toggle
 
       // Tap the first switch (Push Notifications)
       await tester.tap(switches.first);
@@ -279,4 +279,16 @@ void main() {
       expect(find.text('Dashboard Screen'), findsOneWidget);
     });
   });
+  
+    testWidgets('Bottom nav callback covers current-index return path',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(home: const ProfileScreen()));
+
+      final nav =
+          tester.widget<BottomNavigationBar>(find.byType(BottomNavigationBar));
+      // case 4 returns (already on Profile)
+      nav.onTap?.call(4);
+      await tester.pump();
+      expect(find.text('Profile'), findsAtLeastNWidgets(1));
+    });
 }

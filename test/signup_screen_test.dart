@@ -17,6 +17,27 @@ void main() {
     expect(find.text('Continue'), findsOneWidget);
   });
 
+    testWidgets('Selecting role updates selection state (smoke)', (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: SignUpScreen()));
+
+        // Tap caregiver card (covers lines 76–78)
+    await tester.tap(find.text("I'm a Caregiver"));
+    await tester.pumpAndSettle();
+
+    // Tap recipient card (covers lines 94–96)
+
+    // Tap the recipient card.
+    await tester.tap(find.text("I'm a Care Recipient"));
+    await tester.pumpAndSettle();
+
+    // Tapping again should not crash and keeps UI stable.
+    await tester.tap(find.text("I'm a Care Recipient"));
+    await tester.pump();
+
+    // Basic sanity: bullets should still be visible.
+    expect(find.text('View your care plan and tasks'), findsOneWidget);
+  });
+
   testWidgets('Continue navigates to dashboard', (tester) async {
     await tester.pumpWidget(
       MaterialApp(

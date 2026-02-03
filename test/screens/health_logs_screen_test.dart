@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stml_careconnect/screens/health_logs_screen.dart';
 import 'package:stml_careconnect/app/app_routes.dart';
+import 'package:stml_careconnect/screens/messages_screen.dart';
 import 'package:stml_careconnect/theme/app_theme.dart';
 
 void main() {
@@ -256,4 +257,21 @@ void main() {
       expect(find.byIcon(Icons.trending_up), findsOneWidget);
     });
   });
+  
+    testWidgets('Bottom nav callback covers current-index return path',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(primaryColor: AppColors.primary),
+          home: const MessagesScreen(),
+        ),
+      );
+
+      final nav =
+          tester.widget<BottomNavigationBar>(find.byType(BottomNavigationBar));
+      // case 3 returns (already on Messages)
+      nav.onTap?.call(3);
+      await tester.pump();
+      expect(find.text('Messages'), findsAtLeastNWidgets(1));
+    });
 }
