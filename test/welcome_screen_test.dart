@@ -12,8 +12,10 @@ void main() {
 
     expect(find.text('CareConnect'), findsOneWidget);
     expect(find.text('Get Started'), findsOneWidget);
+    expect(find.text('Log in'), findsOneWidget);
   });
-    testWidgets('Get Started navigates to login', (tester) async {
+
+  testWidgets('Welcome: tapping Log in navigates to Login', (tester) async {
     await tester.pumpWidget(MaterialApp(
       home: const WelcomeScreen(),
       routes: {
@@ -21,9 +23,25 @@ void main() {
       },
     ));
 
-    await tester.tap(find.text('Get Started'));
+    await tester.tap(find.text('Log in'));
     await tester.pumpAndSettle();
 
     expect(find.text('Login Screen'), findsOneWidget);
+  });
+
+  testWidgets('Welcome: tapping Get Started navigates to Role Selection',
+      (tester) async {
+    await tester.pumpWidget(MaterialApp(
+      home: const WelcomeScreen(),
+      routes: {
+        AppRoutes.roleSelection: (_) =>
+            const Scaffold(body: Text('Role Selection Screen')),
+      },
+    ));
+
+    await tester.tap(find.text('Get Started'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Role Selection Screen'), findsOneWidget);
   });
 }

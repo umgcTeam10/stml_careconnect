@@ -1,9 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stml_careconnect/app/app_routes.dart';
+import 'package:stml_careconnect/screens/dashboard_screen.dart';
 import 'package:stml_careconnect/screens/login_screen.dart';
 
 void main() {
+  testWidgets('Login: tapping Sign In navigates into the tabbed area (Home tab is visible)',
+      (tester) async {
+    await tester.pumpWidget(MaterialApp(
+      home: const LoginScreen(),
+      routes: {
+        AppRoutes.dashboard: (_) => const DashboardScreen(),
+      },
+    ));
+
+    await tester.ensureVisible(find.text('Sign In'));
+    await tester.tap(find.text('Sign In'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Your Health Today'), findsOneWidget);
+    expect(find.text('Home'), findsOneWidget);
+  });
+
   testWidgets('Login screen shows header and sign in',
       (WidgetTester tester) async {
     await tester.pumpWidget(

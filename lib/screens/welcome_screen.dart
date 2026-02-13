@@ -50,14 +50,17 @@ class WelcomeScreen extends StatelessWidget {
                               children: [
                                 AppLogoBadge.square(),
                                 const SizedBox(height: 16),
-                                const Text(
-                                  'CareConnect',
-                                  style: TextStyle(
+                                Semantics(
+                                  header: true,
+                                  child: const Text(
+                                    'CareConnect',
+                                    style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  textAlign: TextAlign.center,
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                                 const SizedBox(height: 8),
                                 const Text(
@@ -95,9 +98,21 @@ class WelcomeScreen extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.pushNamed(
                                       context,
-                                      AppRoutes.login,
+                                      AppRoutes.roleSelection,
                                     );
                                   },
+                                ),
+                                const SizedBox(height: 12),
+                                Center(
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        AppRoutes.login,
+                                      );
+                                    },
+                                    child: const Text('Log in'),
+                                  ),
                                 ),
                               ],
                             ),

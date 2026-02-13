@@ -1,0 +1,7 @@
+# Week 6 Flutter Coverage
+
+## Baseline
+(Paste `flutter test --coverage` output before Week 6 changes)
+
+## Final
+(Paste `flutter test --coverage` output after Week 6 changes)
