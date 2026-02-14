@@ -63,16 +63,12 @@ class TasksScreen extends StatelessWidget {
                   children: [
                     _orderedSection(
                       1,
-                      Semantics(
-                        button: true,
-                        label: 'Go back',
-                        child: IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          tooltip: 'Back',
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.black87,
-                          ),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        tooltip: 'Back',
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.black87,
                         ),
                       ),
                     ),
@@ -135,26 +131,21 @@ class TasksScreen extends StatelessWidget {
                         Expanded(
                           child: _orderedSection(
                             2,
-                            Semantics(
-                              button: true,
-                              label: 'Add task',
-                              hint: 'Adds a new task to your list',
-                              child: ElevatedButton.icon(
-                                onPressed: () => _showNotImplemented(context),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: _headerColor,
-                                  foregroundColor: Colors.white,
-                                  minimumSize: const Size(0, 48),
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 14,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
+                            ElevatedButton.icon(
+                              onPressed: () => _showNotImplemented(context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: _headerColor,
+                                foregroundColor: Colors.white,
+                                minimumSize: const Size(0, 48),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
                                 ),
-                                icon: const Icon(Icons.add),
-                                label: const Text('Add Task'),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
                               ),
+                              icon: const Icon(Icons.add),
+                              label: const Text('Add Task'),
                             ),
                           ),
                         ),
@@ -164,26 +155,21 @@ class TasksScreen extends StatelessWidget {
                           height: 48,
                           child: _orderedSection(
                             3,
-                            Semantics(
-                              button: true,
-                              label: 'Filter tasks',
-                              hint: 'Opens task filters',
-                              child: OutlinedButton(
-                                onPressed: () => _showNotImplemented(context),
-                                style: OutlinedButton.styleFrom(
-                                  foregroundColor: Colors.black87,
-                                  minimumSize: const Size(48, 48),
-                                  padding: EdgeInsets.zero,
-                                  alignment: Alignment.center,
-                                  side: const BorderSide(color: _cardBorder),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
+                            OutlinedButton(
+                              onPressed: () => _showNotImplemented(context),
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: Colors.black87,
+                                minimumSize: const Size(48, 48),
+                                padding: EdgeInsets.zero,
+                                alignment: Alignment.center,
+                                side: const BorderSide(color: _cardBorder),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: const Icon(
-                                  Icons.filter_alt_outlined,
-                                  semanticLabel: 'Filter tasks',
-                                ),
+                              ),
+                              child: const Icon(
+                                Icons.filter_alt_outlined,
+                                semanticLabel: 'Filter tasks',
                               ),
                             ),
                           ),
@@ -366,11 +352,7 @@ class _AlertCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: Semantics(
-              button: true,
-              label: 'View overdue tasks',
-              child: Text('View'),
-            ),
+            child: const Text('View'),
           ),
         ],
       ),
@@ -469,42 +451,34 @@ class _NowTaskCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: Semantics(
-                  button: true,
-                  label: 'Start physical therapy appointment',
-                  child: ElevatedButton(
-                    onPressed: onStart,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _headerColor,
-                      foregroundColor: Colors.white,
-                      minimumSize: const Size(0, 48),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                child: ElevatedButton(
+                  onPressed: onStart,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _headerColor,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(0, 48),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Text('Start'),
                   ),
+                  child: const Text('Start'),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Semantics(
-                  button: true,
-                  label: 'Snooze appointment for 10 minutes',
-                  child: OutlinedButton(
-                    onPressed: onSnooze,
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.black87,
-                      minimumSize: const Size(0, 48),
-                      side: const BorderSide(color: _cardBorder),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                child: OutlinedButton(
+                  onPressed: onSnooze,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.black87,
+                    minimumSize: const Size(0, 48),
+                    side: const BorderSide(color: _cardBorder),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Text('Snooze 10 min'),
                   ),
+                  child: const Text('Snooze 10 min'),
                 ),
               ),
             ],
@@ -676,42 +650,34 @@ class _TaskCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: Semantics(
-                  button: true,
-                  label: '$primaryLabel task $title',
-                  child: ElevatedButton(
-                    onPressed: onPrimary,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _headerColor,
-                      foregroundColor: Colors.white,
-                      minimumSize: const Size(0, 48),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                child: ElevatedButton(
+                  onPressed: onPrimary,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _headerColor,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(0, 48),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text(primaryLabel),
                   ),
+                  child: Text(primaryLabel),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Semantics(
-                  button: true,
-                  label: '$secondaryLabel task $title',
-                  child: OutlinedButton(
-                    onPressed: onSecondary,
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.black87,
-                      minimumSize: const Size(0, 48),
-                      side: const BorderSide(color: _cardBorder),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                child: OutlinedButton(
+                  onPressed: onSecondary,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.black87,
+                    minimumSize: const Size(0, 48),
+                    side: const BorderSide(color: _cardBorder),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text(secondaryLabel),
                   ),
+                  child: Text(secondaryLabel),
                 ),
               ),
             ],
@@ -832,23 +798,19 @@ class _TasksBottomBar extends StatelessWidget {
                   ],
                 ),
               ),
-              Semantics(
-                button: true,
-                label: 'View current appointment',
-                child: TextButton(
-                  onPressed: onNowTap,
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(48, 48),
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                  ),
-                  child: Row(
-                    children: const [
-                      Text('View'),
-                      SizedBox(width: 4),
-                      Icon(Icons.arrow_forward, size: 14),
-                    ],
-                  ),
+              TextButton(
+                onPressed: onNowTap,
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(48, 48),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                ),
+                child: Row(
+                  children: const [
+                    Text('View'),
+                    SizedBox(width: 4),
+                    Icon(Icons.arrow_forward, size: 14),
+                  ],
                 ),
               ),
             ],

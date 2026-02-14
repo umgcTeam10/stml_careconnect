@@ -121,31 +121,24 @@ class DashboardScreen extends StatelessWidget {
                                 const SizedBox(height: 12),
                                 _orderedSection(
                                   1,
-                                  Semantics(
-                                    button: true,
-                                    label: 'Log wellness check',
-                                    hint: 'Navigate to health logs',
-                                    child: ElevatedButton(
-                                      onPressed: () => Navigator.pushNamed(
-                                        context,
-                                        AppRoutes.healthLogs,
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColors.primary,
-                                        foregroundColor: Colors.white,
-                                        minimumSize: const Size(48, 48),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 18,
-                                          vertical: 10,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            10,
-                                          ),
-                                        ),
-                                      ),
-                                      child: const Text('Log Wellness Check'),
+                                  ElevatedButton(
+                                    onPressed: () => Navigator.pushNamed(
+                                      context,
+                                      AppRoutes.healthLogs,
                                     ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.primary,
+                                      foregroundColor: Colors.white,
+                                      minimumSize: const Size(48, 48),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 18,
+                                        vertical: 10,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    child: const Text('Log Wellness Check'),
                                   ),
                                 ),
                               ],
@@ -241,25 +234,21 @@ class DashboardScreen extends StatelessWidget {
                             width: double.infinity,
                             child: _orderedSection(
                               2,
-                              Semantics(
-                                button: true,
-                                label: 'Set reminder for next appointment',
-                                child: OutlinedButton.icon(
-                                  onPressed: () => _showNotImplemented(context),
-                                  style: OutlinedButton.styleFrom(
-                                    foregroundColor: Colors.black87,
-                                    minimumSize: const Size(48, 48),
-                                    side: const BorderSide(color: _cardBorder),
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 12,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
+                              OutlinedButton.icon(
+                                onPressed: () => _showNotImplemented(context),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: Colors.black87,
+                                  minimumSize: const Size(48, 48),
+                                  side: const BorderSide(color: _cardBorder),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
                                   ),
-                                  icon: const Icon(Icons.notifications_none),
-                                  label: const Text('Set Reminder'),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                 ),
+                                icon: const Icon(Icons.notifications_none),
+                                label: const Text('Set Reminder'),
                               ),
                             ),
                           ),
@@ -285,26 +274,21 @@ class DashboardScreen extends StatelessWidget {
                               ),
                               _orderedSection(
                                 3,
-                                Semantics(
-                                  button: true,
-                                  label: 'View all today tasks',
-                                  child: TextButton(
-                                    onPressed: () =>
-                                        _showNotImplemented(context),
-                                    style: TextButton.styleFrom(
-                                      foregroundColor: AppColors.primary,
-                                      minimumSize: const Size(48, 48),
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                      ),
+                                TextButton(
+                                  onPressed: () => _showNotImplemented(context),
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: AppColors.primary,
+                                    minimumSize: const Size(48, 48),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
                                     ),
-                                    child: Row(
-                                      children: const [
-                                        Text('View All'),
-                                        SizedBox(width: 4),
-                                        Icon(Icons.arrow_forward, size: 16),
-                                      ],
-                                    ),
+                                  ),
+                                  child: Row(
+                                    children: const [
+                                      Text('View All'),
+                                      SizedBox(width: 4),
+                                      Icon(Icons.arrow_forward, size: 16),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -350,26 +334,21 @@ class DashboardScreen extends StatelessWidget {
                               ),
                               _orderedSection(
                                 4,
-                                Semantics(
-                                  button: true,
-                                  label: 'View all wellness checks',
-                                  child: TextButton(
-                                    onPressed: () =>
-                                        _showNotImplemented(context),
-                                    style: TextButton.styleFrom(
-                                      foregroundColor: AppColors.primary,
-                                      minimumSize: const Size(48, 48),
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                      ),
+                                TextButton(
+                                  onPressed: () => _showNotImplemented(context),
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: AppColors.primary,
+                                    minimumSize: const Size(48, 48),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
                                     ),
-                                    child: Row(
-                                      children: const [
-                                        Text('View All'),
-                                        SizedBox(width: 4),
-                                        Icon(Icons.arrow_forward, size: 16),
-                                      ],
-                                    ),
+                                  ),
+                                  child: Row(
+                                    children: const [
+                                      Text('View All'),
+                                      SizedBox(width: 4),
+                                      Icon(Icons.arrow_forward, size: 16),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -411,25 +390,21 @@ class DashboardScreen extends StatelessWidget {
                           const SizedBox(height: 14),
                           _orderedSection(
                             5,
-                            Semantics(
-                              button: true,
-                              label: 'Send message to care team',
-                              child: ElevatedButton(
-                                onPressed: () => _showNotImplemented(context),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: AppColors.primary,
-                                  minimumSize: const Size(48, 48),
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 12,
-                                    horizontal: 20,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
+                            ElevatedButton(
+                              onPressed: () => _showNotImplemented(context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: AppColors.primary,
+                                minimumSize: const Size(48, 48),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                  horizontal: 20,
                                 ),
-                                child: const Text('Send Message'),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
+                              child: const Text('Send Message'),
                             ),
                           ),
                         ],
@@ -478,24 +453,20 @@ class DashboardScreen extends StatelessWidget {
                             width: double.infinity,
                             child: _orderedSection(
                               6,
-                              Semantics(
-                                button: true,
-                                label: 'View full health history',
-                                child: OutlinedButton(
-                                  onPressed: () => _showNotImplemented(context),
-                                  style: OutlinedButton.styleFrom(
-                                    foregroundColor: Colors.black87,
-                                    minimumSize: const Size(48, 48),
-                                    side: const BorderSide(color: _cardBorder),
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 12,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
+                              OutlinedButton(
+                                onPressed: () => _showNotImplemented(context),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: Colors.black87,
+                                  minimumSize: const Size(48, 48),
+                                  side: const BorderSide(color: _cardBorder),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
                                   ),
-                                  child: const Text('View Full History'),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                 ),
+                                child: const Text('View Full History'),
                               ),
                             ),
                           ),
@@ -987,23 +958,19 @@ class _DashboardBottomBar extends StatelessWidget {
                   ],
                 ),
               ),
-              Semantics(
-                button: true,
-                label: 'View current appointment',
-                child: TextButton(
-                  onPressed: onNowTap,
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(48, 48),
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                  ),
-                  child: Row(
-                    children: const [
-                      Text('View'),
-                      SizedBox(width: 4),
-                      Icon(Icons.arrow_forward, size: 14),
-                    ],
-                  ),
+              TextButton(
+                onPressed: onNowTap,
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(48, 48),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                ),
+                child: Row(
+                  children: const [
+                    Text('View'),
+                    SizedBox(width: 4),
+                    Icon(Icons.arrow_forward, size: 14),
+                  ],
                 ),
               ),
             ],

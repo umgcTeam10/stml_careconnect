@@ -195,16 +195,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   children: [
                     _orderedSection(
                       1,
-                      Semantics(
-                        button: true,
-                        label: 'Go back',
-                        child: IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          tooltip: 'Back',
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.black87,
-                          ),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        tooltip: 'Back',
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.black87,
                         ),
                       ),
                     ),
@@ -239,14 +235,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         children: [
                           _orderedSection(
                             2,
-                            Semantics(
-                              button: true,
-                              label: 'Previous month',
-                              child: IconButton(
-                                onPressed: () => _changeMonth(-1),
-                                tooltip: 'Previous month',
-                                icon: const Icon(Icons.chevron_left),
-                              ),
+                            IconButton(
+                              onPressed: () => _changeMonth(-1),
+                              tooltip: 'Previous month',
+                              icon: const Icon(Icons.chevron_left),
                             ),
                           ),
                           Expanded(
@@ -263,14 +255,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           ),
                           _orderedSection(
                             3,
-                            Semantics(
-                              button: true,
-                              label: 'Next month',
-                              child: IconButton(
-                                onPressed: () => _changeMonth(1),
-                                tooltip: 'Next month',
-                                icon: const Icon(Icons.chevron_right),
-                              ),
+                            IconButton(
+                              onPressed: () => _changeMonth(1),
+                              tooltip: 'Next month',
+                              icon: const Icon(Icons.chevron_right),
                             ),
                           ),
                         ],
@@ -299,13 +287,48 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                 children: [
                                   Row(
                                     children: const [
-                                      Expanded(child: _WeekdayLabel('Sun')),
-                                      Expanded(child: _WeekdayLabel('Mon')),
-                                      Expanded(child: _WeekdayLabel('Tue')),
-                                      Expanded(child: _WeekdayLabel('Wed')),
-                                      Expanded(child: _WeekdayLabel('Thu')),
-                                      Expanded(child: _WeekdayLabel('Fri')),
-                                      Expanded(child: _WeekdayLabel('Sat')),
+                                      Expanded(
+                                        child: _WeekdayLabel(
+                                          'Sun',
+                                          semanticLabel: 'Sunday',
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: _WeekdayLabel(
+                                          'Mon',
+                                          semanticLabel: 'Monday',
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: _WeekdayLabel(
+                                          'Tue',
+                                          semanticLabel: 'Tuesday',
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: _WeekdayLabel(
+                                          'Wed',
+                                          semanticLabel: 'Wednesday',
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: _WeekdayLabel(
+                                          'Thu',
+                                          semanticLabel: 'Thursday',
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: _WeekdayLabel(
+                                          'Fri',
+                                          semanticLabel: 'Friday',
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: _WeekdayLabel(
+                                          'Sat',
+                                          semanticLabel: 'Saturday',
+                                        ),
+                                      ),
                                     ],
                                   ),
                                   const SizedBox(height: 8),
@@ -406,19 +429,25 @@ class _CalendarScreenState extends State<CalendarScreen> {
 }
 
 class _WeekdayLabel extends StatelessWidget {
-  const _WeekdayLabel(this.label);
+  const _WeekdayLabel(this.label, {required this.semanticLabel});
 
   final String label;
+  final String semanticLabel;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      label,
-      textAlign: TextAlign.center,
-      style: const TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
-        color: _mutedText,
+    return Semantics(
+      label: semanticLabel,
+      child: ExcludeSemantics(
+        child: Text(
+          label,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: _mutedText,
+          ),
+        ),
       ),
     );
   }
@@ -476,10 +505,13 @@ class _CalendarCell extends StatelessWidget {
     return _orderedSection(
       focusOrder,
       Semantics(
+        container: true,
         button: true,
         selected: selected,
         label: semanticLabel,
         hint: selected ? 'Selected date' : 'Select date',
+        onTap: onSelected,
+        excludeSemantics: true,
         child: ConstrainedBox(
           constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
           child: TextButton(
@@ -503,12 +535,14 @@ class _CalendarCell extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Text(
-                        '${day.day}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: textColor,
+                      ExcludeSemantics(
+                        child: Text(
+                          '${day.day}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: textColor,
+                          ),
                         ),
                       ),
                       if (day.showDot)
@@ -709,23 +743,19 @@ class _CalendarBottomBar extends StatelessWidget {
                   ],
                 ),
               ),
-              Semantics(
-                button: true,
-                label: 'View current appointment',
-                child: TextButton(
-                  onPressed: onNowTap,
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(48, 48),
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                  ),
-                  child: Row(
-                    children: const [
-                      Text('View'),
-                      SizedBox(width: 4),
-                      Icon(Icons.arrow_forward, size: 14),
-                    ],
-                  ),
+              TextButton(
+                onPressed: onNowTap,
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(48, 48),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                ),
+                child: Row(
+                  children: const [
+                    Text('View'),
+                    SizedBox(width: 4),
+                    Icon(Icons.arrow_forward, size: 14),
+                  ],
                 ),
               ),
             ],
