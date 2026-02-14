@@ -12,6 +12,11 @@ const _chipBlueText = Color(0xFF2F5DA8);
 const _chipGreen = Color(0xFFE8F7EE);
 const _chipGreenText = Color(0xFF1E7A46);
 const _careTeamBlue = Color(0xFF123E6B);
+const _onHeaderSecondary = Color(0xFFDDE9FB);
+
+Widget _orderedSection(double order, Widget child) {
+  return FocusTraversalOrder(order: NumericFocusOrder(order), child: child);
+}
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -46,407 +51,470 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.lightBackground,
-      body: Column(
-        children: [
-          const _DashboardHeader(),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 160),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Your Health Today',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+    return FocusTraversalGroup(
+      policy: OrderedTraversalPolicy(),
+      child: Scaffold(
+        backgroundColor: AppColors.lightBackground,
+        body: Column(
+          children: [
+            const _DashboardHeader(),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 160),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Your Health Today',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    "Here's your care summary for today",
-                    style: TextStyle(color: _mutedText),
-                  ),
-                  const SizedBox(height: 16),
-                  _DashboardCard(
-                    color: _softBlue,
-                    border: Border.all(color: _softBlueBorder),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 44,
-                          height: 44,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(14),
+                    const SizedBox(height: 6),
+                    const Text(
+                      "Here's your care summary for today",
+                      style: TextStyle(color: _mutedText),
+                    ),
+                    const SizedBox(height: 16),
+                    _DashboardCard(
+                      color: _softBlue,
+                      border: Border.all(color: _softBlueBorder),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 44,
+                            height: 44,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            child: const Icon(
+                              Icons.sentiment_satisfied_alt_outlined,
+                              color: AppColors.primary,
+                            ),
                           ),
-                          child: const Icon(
-                            Icons.sentiment_satisfied_alt_outlined,
-                            color: AppColors.primary,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'How are you feeling today?',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                const Text(
+                                  'Take a moment to log your mood and symptoms',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: _mutedText,
+                                    height: 1.3,
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                _orderedSection(
+                                  1,
+                                  Semantics(
+                                    button: true,
+                                    label: 'Log wellness check',
+                                    hint: 'Navigate to health logs',
+                                    child: ElevatedButton(
+                                      onPressed: () => Navigator.pushNamed(
+                                        context,
+                                        AppRoutes.healthLogs,
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.primary,
+                                        foregroundColor: Colors.white,
+                                        minimumSize: const Size(48, 48),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 18,
+                                          vertical: 10,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                      ),
+                                      child: const Text('Log Wellness Check'),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: const [
+                        Expanded(
+                          child: _StatCard(
+                            icon: Icons.check_circle_outline,
+                            iconColor: _chipGreenText,
+                            iconBackground: _chipGreen,
+                            value: '1',
+                            label: 'Completed',
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: _StatCard(
+                            icon: Icons.access_time,
+                            iconColor: _chipBlueText,
+                            iconBackground: _chipBlue,
+                            value: '2',
+                            label: 'Pending',
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: _StatCard(
+                            icon: Icons.calendar_today_outlined,
+                            iconColor: AppColors.primary,
+                            iconBackground: Color(0xFFEAF1FF),
+                            value: '3',
+                            label: 'Appointments',
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    _DashboardCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: const [
+                              Expanded(
+                                child: Text(
+                                  'Next Appointment',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ),
+                              _TagChip(
+                                label: 'therapy',
+                                background: _chipBlue,
+                                foreground: _chipBlueText,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            'Physical Therapy',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            'Knee rehabilitation session',
+                            style: TextStyle(color: _mutedText),
+                          ),
+                          const SizedBox(height: 12),
+                          _InfoRow(
+                            icon: Icons.calendar_today_outlined,
+                            label: 'Monday, Jan 26 at 02:00 PM',
+                          ),
+                          const SizedBox(height: 6),
+                          _InfoRow(
+                            icon: Icons.person_outline,
+                            label: 'Dr. Lisa Chen, PT',
+                          ),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            width: double.infinity,
+                            child: _orderedSection(
+                              2,
+                              Semantics(
+                                button: true,
+                                label: 'Set reminder for next appointment',
+                                child: OutlinedButton.icon(
+                                  onPressed: () => _showNotImplemented(context),
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: Colors.black87,
+                                    minimumSize: const Size(48, 48),
+                                    side: const BorderSide(color: _cardBorder),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 12,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  icon: const Icon(Icons.notifications_none),
+                                  label: const Text('Set Reminder'),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    _DashboardCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
                             children: [
-                              const Text(
-                                'How are you feeling today?',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
+                              const Expanded(
+                                child: Text(
+                                  "Today's Tasks",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black87,
+                                  ),
                                 ),
                               ),
-                              const SizedBox(height: 6),
-                              const Text(
-                                'Take a moment to log your mood and symptoms',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: _mutedText,
-                                  height: 1.3,
+                              _orderedSection(
+                                3,
+                                Semantics(
+                                  button: true,
+                                  label: 'View all today tasks',
+                                  child: TextButton(
+                                    onPressed: () =>
+                                        _showNotImplemented(context),
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: AppColors.primary,
+                                      minimumSize: const Size(48, 48),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: const [
+                                        Text('View All'),
+                                        SizedBox(width: 4),
+                                        Icon(Icons.arrow_forward, size: 16),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                              const SizedBox(height: 12),
-                              ElevatedButton(
-                                onPressed: () => Navigator.pushNamed(
-                                  context,
-                                  AppRoutes.healthLogs,
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          const _TaskItem(
+                            title: 'Blood Pressure Check',
+                            time: '09:00 AM',
+                            levelLabel: 'medium',
+                            levelBackground: _chipBlue,
+                            levelForeground: _chipBlueText,
+                          ),
+                          const SizedBox(height: 12),
+                          const Divider(height: 1, color: _cardBorder),
+                          const SizedBox(height: 12),
+                          const _TaskItem(
+                            title: 'Prepare Lunch',
+                            time: '12:00 PM',
+                            levelLabel: 'medium',
+                            levelBackground: _chipBlue,
+                            levelForeground: _chipBlueText,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    _DashboardCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Expanded(
+                                child: Text(
+                                  'Recent Wellness Check',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black87,
+                                  ),
                                 ),
+                              ),
+                              _orderedSection(
+                                4,
+                                Semantics(
+                                  button: true,
+                                  label: 'View all wellness checks',
+                                  child: TextButton(
+                                    onPressed: () =>
+                                        _showNotImplemented(context),
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: AppColors.primary,
+                                      minimumSize: const Size(48, 48),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: const [
+                                        Text('View All'),
+                                        SizedBox(width: 4),
+                                        Icon(Icons.arrow_forward, size: 16),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          const _WellnessItem(
+                            title: 'Mood Check',
+                            subtitle: 'Feeling good today',
+                            time: 'Jan 26, 1:59 PM',
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    _DashboardCard(
+                      color: _careTeamBlue,
+                      border: Border.all(color: _careTeamBlue),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Your care team is here for you',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          const Text(
+                            'Need help or have questions? Reach out anytime.',
+                            style: TextStyle(
+                              color: _onHeaderSecondary,
+                              fontSize: 13,
+                              height: 1.3,
+                            ),
+                          ),
+                          const SizedBox(height: 14),
+                          _orderedSection(
+                            5,
+                            Semantics(
+                              button: true,
+                              label: 'Send message to care team',
+                              child: ElevatedButton(
+                                onPressed: () => _showNotImplemented(context),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primary,
-                                  foregroundColor: Colors.white,
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: AppColors.primary,
+                                  minimumSize: const Size(48, 48),
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 18,
-                                    vertical: 10,
+                                    vertical: 12,
+                                    horizontal: 20,
                                   ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
-                                child: const Text('Log Wellness Check'),
+                                child: const Text('Send Message'),
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: const [
-                      Expanded(
-                        child: _StatCard(
-                          icon: Icons.check_circle_outline,
-                          iconColor: _chipGreenText,
-                          iconBackground: _chipGreen,
-                          value: '1',
-                          label: 'Completed',
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: _StatCard(
-                          icon: Icons.access_time,
-                          iconColor: _chipBlueText,
-                          iconBackground: _chipBlue,
-                          value: '2',
-                          label: 'Pending',
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: _StatCard(
-                          icon: Icons.calendar_today_outlined,
-                          iconColor: AppColors.primary,
-                          iconBackground: Color(0xFFEAF1FF),
-                          value: '3',
-                          label: 'Appointments',
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  _DashboardCard(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: const [
-                            Expanded(
-                              child: Text(
-                                'Next Appointment',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
+                    const SizedBox(height: 16),
+                    _DashboardCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Health Summary',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            'Recent vitals and measurements',
+                            style: TextStyle(fontSize: 12, color: _mutedText),
+                          ),
+                          const SizedBox(height: 12),
+                          const _SummaryItem(
+                            icon: Icons.monitor_heart_outlined,
+                            title: 'Blood Pressure',
+                            subtitle: '1 hour ago',
+                            value: '120/80',
+                            iconBackground: Color(0xFFE6F4FF),
+                            iconColor: AppColors.primary,
+                          ),
+                          const SizedBox(height: 12),
+                          const Divider(height: 1, color: _cardBorder),
+                          const SizedBox(height: 12),
+                          const _SummaryItem(
+                            icon: Icons.favorite_border,
+                            title: 'Heart Rate',
+                            subtitle: '1 hour ago',
+                            value: '72 bpm',
+                            iconBackground: Color(0xFFFFE9EC),
+                            iconColor: Color(0xFFDA3B4A),
+                          ),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            width: double.infinity,
+                            child: _orderedSection(
+                              6,
+                              Semantics(
+                                button: true,
+                                label: 'View full health history',
+                                child: OutlinedButton(
+                                  onPressed: () => _showNotImplemented(context),
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: Colors.black87,
+                                    minimumSize: const Size(48, 48),
+                                    side: const BorderSide(color: _cardBorder),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 12,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: const Text('View Full History'),
                                 ),
                               ),
                             ),
-                            _TagChip(
-                              label: 'therapy',
-                              background: _chipBlue,
-                              foreground: _chipBlueText,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        const Text(
-                          'Physical Therapy',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Knee rehabilitation session',
-                          style: TextStyle(color: _mutedText),
-                        ),
-                        const SizedBox(height: 12),
-                        _InfoRow(
-                          icon: Icons.calendar_today_outlined,
-                          label: 'Monday, Jan 26 at 02:00 PM',
-                        ),
-                        const SizedBox(height: 6),
-                        _InfoRow(
-                          icon: Icons.person_outline,
-                          label: 'Dr. Lisa Chen, PT',
-                        ),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          width: double.infinity,
-                          child: OutlinedButton.icon(
-                            onPressed: () => _showNotImplemented(context),
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.black87,
-                              side: const BorderSide(color: _cardBorder),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            icon: const Icon(Icons.notifications_none),
-                            label: const Text('Set Reminder'),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  _DashboardCard(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Expanded(
-                              child: Text(
-                                "Today's Tasks",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () => _showNotImplemented(context),
-                              style: TextButton.styleFrom(
-                                foregroundColor: AppColors.primary,
-                                padding: EdgeInsets.zero,
-                                minimumSize: Size.zero,
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
-                              child: Row(
-                                children: const [
-                                  Text('View All'),
-                                  SizedBox(width: 4),
-                                  Icon(Icons.arrow_forward, size: 16),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        const _TaskItem(
-                          title: 'Blood Pressure Check',
-                          time: '09:00 AM',
-                          levelLabel: 'medium',
-                          levelBackground: _chipBlue,
-                          levelForeground: _chipBlueText,
-                        ),
-                        const SizedBox(height: 12),
-                        const Divider(height: 1, color: _cardBorder),
-                        const SizedBox(height: 12),
-                        const _TaskItem(
-                          title: 'Prepare Lunch',
-                          time: '12:00 PM',
-                          levelLabel: 'medium',
-                          levelBackground: _chipBlue,
-                          levelForeground: _chipBlueText,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _DashboardCard(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Expanded(
-                              child: Text(
-                                'Recent Wellness Check',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () => _showNotImplemented(context),
-                              style: TextButton.styleFrom(
-                                foregroundColor: AppColors.primary,
-                                padding: EdgeInsets.zero,
-                                minimumSize: Size.zero,
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
-                              child: Row(
-                                children: const [
-                                  Text('View All'),
-                                  SizedBox(width: 4),
-                                  Icon(Icons.arrow_forward, size: 16),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        const _WellnessItem(
-                          title: 'Mood Check',
-                          subtitle: 'Feeling good today',
-                          time: 'Jan 26, 1:59 PM',
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _DashboardCard(
-                    color: _careTeamBlue,
-                    border: Border.all(color: _careTeamBlue),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Your care team is here for you',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        const Text(
-                          'Need help or have questions? Reach out anytime.',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 13,
-                            height: 1.3,
-                          ),
-                        ),
-                        const SizedBox(height: 14),
-                        ElevatedButton(
-                          onPressed: () => _showNotImplemented(context),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: AppColors.primary,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 12,
-                              horizontal: 20,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: const Text('Send Message'),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _DashboardCard(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Health Summary',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Recent vitals and measurements',
-                          style: TextStyle(fontSize: 12, color: _mutedText),
-                        ),
-                        const SizedBox(height: 12),
-                        const _SummaryItem(
-                          icon: Icons.monitor_heart_outlined,
-                          title: 'Blood Pressure',
-                          subtitle: '1 hour ago',
-                          value: '120/80',
-                          iconBackground: Color(0xFFE6F4FF),
-                          iconColor: AppColors.primary,
-                        ),
-                        const SizedBox(height: 12),
-                        const Divider(height: 1, color: _cardBorder),
-                        const SizedBox(height: 12),
-                        const _SummaryItem(
-                          icon: Icons.favorite_border,
-                          title: 'Heart Rate',
-                          subtitle: '1 hour ago',
-                          value: '72 bpm',
-                          iconBackground: Color(0xFFFFE9EC),
-                          iconColor: Color(0xFFDA3B4A),
-                        ),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          width: double.infinity,
-                          child: OutlinedButton(
-                            onPressed: () => _showNotImplemented(context),
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.black87,
-                              side: const BorderSide(color: _cardBorder),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            child: const Text('View Full History'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
+          ],
+        ),
+        bottomNavigationBar: _orderedSection(
+          7,
+          _DashboardBottomBar(
+            onTap: (index) => _onNavTap(context, index),
+            onNowTap: () => _showNotImplemented(context),
           ),
-        ],
-      ),
-      bottomNavigationBar: _DashboardBottomBar(
-        onTap: (index) => _onNavTap(context, index),
-        onNowTap: () => _showNotImplemented(context),
+        ),
       ),
     );
   }
@@ -469,7 +537,7 @@ class _DashboardHeader extends StatelessWidget {
             const Text(
               'Monday, January 26, 2026',
               style: TextStyle(
-                color: Colors.white70,
+                color: _onHeaderSecondary,
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
               ),
@@ -486,7 +554,7 @@ class _DashboardHeader extends StatelessWidget {
             const SizedBox(height: 14),
             Row(
               children: [
-                const Icon(Icons.person_outline, color: Colors.white70),
+                const Icon(Icons.person_outline, color: _onHeaderSecondary),
                 const SizedBox(width: 6),
                 const Text(
                   'Robert',
@@ -502,13 +570,13 @@ class _DashboardHeader extends StatelessWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.18),
+                    color: Colors.black26,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Text(
                     'Patient',
                     style: TextStyle(
-                      color: Colors.white70,
+                      color: Colors.white,
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                     ),
@@ -517,14 +585,14 @@ class _DashboardHeader extends StatelessWidget {
                 const Spacer(),
                 const Icon(
                   Icons.home_outlined,
-                  color: Colors.white70,
+                  color: _onHeaderSecondary,
                   size: 18,
                 ),
                 const SizedBox(width: 6),
                 const Text(
                   'Home Dashboard',
                   style: TextStyle(
-                    color: Colors.white70,
+                    color: _onHeaderSecondary,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
@@ -864,7 +932,7 @@ class _DashboardBottomBar extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Icon(Icons.schedule, color: Colors.white70, size: 18),
+              const Icon(Icons.schedule, color: _onHeaderSecondary, size: 18),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -883,43 +951,59 @@ class _DashboardBottomBar extends StatelessWidget {
                       spacing: 6,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: const [
-                        Icon(Icons.schedule, size: 12, color: Colors.white70),
+                        Icon(
+                          Icons.schedule,
+                          size: 12,
+                          color: _onHeaderSecondary,
+                        ),
                         Text(
                           '02:00 PM',
-                          style: TextStyle(color: Colors.white70, fontSize: 11),
+                          style: TextStyle(
+                            color: _onHeaderSecondary,
+                            fontSize: 11,
+                          ),
                         ),
                         Text(
                           '•',
-                          style: TextStyle(color: Colors.white70, fontSize: 11),
+                          style: TextStyle(
+                            color: _onHeaderSecondary,
+                            fontSize: 11,
+                          ),
                         ),
                         Icon(
                           Icons.local_hospital_outlined,
                           size: 12,
-                          color: Colors.white70,
+                          color: _onHeaderSecondary,
                         ),
                         Text(
                           'At clinic',
-                          style: TextStyle(color: Colors.white70, fontSize: 11),
+                          style: TextStyle(
+                            color: _onHeaderSecondary,
+                            fontSize: 11,
+                          ),
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-              TextButton(
-                onPressed: onNowTap,
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.zero,
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: Row(
-                  children: const [
-                    Text('View'),
-                    SizedBox(width: 4),
-                    Icon(Icons.arrow_forward, size: 14),
-                  ],
+              Semantics(
+                button: true,
+                label: 'View current appointment',
+                child: TextButton(
+                  onPressed: onNowTap,
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(48, 48),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                  ),
+                  child: Row(
+                    children: const [
+                      Text('View'),
+                      SizedBox(width: 4),
+                      Icon(Icons.arrow_forward, size: 14),
+                    ],
+                  ),
                 ),
               ),
             ],

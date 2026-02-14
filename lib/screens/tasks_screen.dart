@@ -13,14 +13,19 @@ const _chipOrange = Color(0xFFFFF3E0);
 const _chipOrangeText = Color(0xFFB45309);
 const _chipGrey = Color(0xFFF1F5F9);
 const _chipGreyText = Color(0xFF334155);
+const _onHeaderSecondary = Color(0xFFDDE9FB);
+
+Widget _orderedSection(double order, Widget child) {
+  return FocusTraversalOrder(order: NumericFocusOrder(order), child: child);
+}
 
 class TasksScreen extends StatelessWidget {
   const TasksScreen({super.key});
 
   void _showNotImplemented(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Not implemented in Week 4')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Not implemented in Week 4')));
   }
 
   void _onNavTap(BuildContext context, int index) {
@@ -44,168 +49,222 @@ class TasksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.lightBackground,
-      body: Column(
-        children: [
-          SafeArea(
-            bottom: false,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.arrow_back, color: Colors.black87),
-                  ),
-                  const SizedBox(width: 4),
-                  const Text(
-                    'Tasks',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+    return FocusTraversalGroup(
+      policy: OrderedTraversalPolicy(),
+      child: Scaffold(
+        backgroundColor: AppColors.lightBackground,
+        body: Column(
+          children: [
+            SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                child: Row(
+                  children: [
+                    _orderedSection(
+                      1,
+                      Semantics(
+                        button: true,
+                        label: 'Go back',
+                        child: IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          tooltip: 'Back',
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 4),
+                    const Text(
+                      'Tasks',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          const Divider(height: 1, color: _cardBorder),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: const [
-                      Expanded(
-                        child: _StatusCard(
-                          value: '3',
-                          label: 'Today',
-                          background: Color(0xFFF2F7FF),
-                          border: Color(0xFFDCE8FF),
-                          valueColor: AppColors.primary,
+            const Divider(height: 1, color: _cardBorder),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: const [
+                        Expanded(
+                          child: _StatusCard(
+                            value: '3',
+                            label: 'Today',
+                            background: Color(0xFFF2F7FF),
+                            border: Color(0xFFDCE8FF),
+                            valueColor: AppColors.primary,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: _StatusCard(
-                          value: '2',
-                          label: 'Overdue',
-                          background: Color(0xFFFFF5EC),
-                          border: Color(0xFFF4D3B3),
-                          valueColor: _chipOrangeText,
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: _StatusCard(
+                            value: '2',
+                            label: 'Overdue',
+                            background: Color(0xFFFFF5EC),
+                            border: Color(0xFFF4D3B3),
+                            valueColor: _chipOrangeText,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: _StatusCard(
-                          value: '1',
-                          label: 'Done',
-                          background: _chipGreen,
-                          border: Color(0xFFD4EBDD),
-                          valueColor: _chipGreenText,
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: _StatusCard(
+                            value: '1',
+                            label: 'Done',
+                            background: _chipGreen,
+                            border: Color(0xFFD4EBDD),
+                            valueColor: _chipGreenText,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: () => _showNotImplemented(context),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: _headerColor,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _orderedSection(
+                            2,
+                            Semantics(
+                              button: true,
+                              label: 'Add task',
+                              hint: 'Adds a new task to your list',
+                              child: ElevatedButton.icon(
+                                onPressed: () => _showNotImplemented(context),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: _headerColor,
+                                  foregroundColor: Colors.white,
+                                  minimumSize: const Size(0, 48),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 14,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                icon: const Icon(Icons.add),
+                                label: const Text('Add Task'),
+                              ),
                             ),
                           ),
-                          icon: const Icon(Icons.add),
-                          label: const Text('Add Task'),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      SizedBox(
-                        width: 48,
-                        height: 48,
-                        child: OutlinedButton(
-                          onPressed: () => _showNotImplemented(context),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: Colors.black87,
-                            side: const BorderSide(color: _cardBorder),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                        const SizedBox(width: 12),
+                        SizedBox(
+                          width: 48,
+                          height: 48,
+                          child: _orderedSection(
+                            3,
+                            Semantics(
+                              button: true,
+                              label: 'Filter tasks',
+                              hint: 'Opens task filters',
+                              child: OutlinedButton(
+                                onPressed: () => _showNotImplemented(context),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: Colors.black87,
+                                  minimumSize: const Size(48, 48),
+                                  padding: EdgeInsets.zero,
+                                  alignment: Alignment.center,
+                                  side: const BorderSide(color: _cardBorder),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Icon(
+                                  Icons.filter_alt_outlined,
+                                  semanticLabel: 'Filter tasks',
+                                ),
+                              ),
                             ),
                           ),
-                          child: const Icon(Icons.filter_alt_outlined),
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    _orderedSection(
+                      4,
+                      _AlertCard(
+                        icon: Icons.error_outline,
+                        message: 'You have 2 overdue tasks',
+                        onView: () => _showNotImplemented(context),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  _AlertCard(
-                    icon: Icons.error_outline,
-                    message: 'You have 2 overdue tasks',
-                    onView: () => _showNotImplemented(context),
-                  ),
-                  const SizedBox(height: 16),
-                  _NowTaskCard(
-                    onStart: () => _showNotImplemented(context),
-                    onSnooze: () => _showNotImplemented(context),
-                  ),
-                  const SizedBox(height: 16),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: const [
-                      _FilterPill(label: 'Upcoming', selected: true),
-                      _FilterPill(label: 'Today'),
-                      _FilterPill(label: 'Overdue'),
-                      _FilterPill(label: 'Done'),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  _TaskCard(
-                    icon: Icons.monitor_heart_outlined,
-                    title: 'Blood Pressure Check',
-                    description: 'Record morning blood pressure reading',
-                    time: '09:00 AM',
-                    date: 'Jan 31',
-                    severity: 'medium',
-                    tag: 'With breakfast',
-                    onPrimary: () => _showNotImplemented(context),
-                    onSecondary: () => _showNotImplemented(context),
-                    primaryLabel: 'Done',
-                    secondaryLabel: 'Reschedule',
-                  ),
-                  const SizedBox(height: 16),
-                  _TaskCard(
-                    icon: Icons.restaurant_menu,
-                    title: 'Prepare Lunch',
-                    description: 'Low-sodium, diabetic-friendly meal',
-                    time: '12:00 PM',
-                    date: 'Jan 31',
-                    severity: 'medium',
-                    tag: 'With lunch',
-                    onPrimary: () => _showNotImplemented(context),
-                    onSecondary: () => _showNotImplemented(context),
-                    primaryLabel: 'Done',
-                    secondaryLabel: 'Reschedule',
-                  ),
-                ],
+                    ),
+                    const SizedBox(height: 16),
+                    _orderedSection(
+                      5,
+                      _NowTaskCard(
+                        onStart: () => _showNotImplemented(context),
+                        onSnooze: () => _showNotImplemented(context),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: const [
+                        _FilterPill(label: 'Upcoming', selected: true),
+                        _FilterPill(label: 'Today'),
+                        _FilterPill(label: 'Overdue'),
+                        _FilterPill(label: 'Done'),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    _orderedSection(
+                      6,
+                      _TaskCard(
+                        icon: Icons.monitor_heart_outlined,
+                        title: 'Blood Pressure Check',
+                        description: 'Record morning blood pressure reading',
+                        time: '09:00 AM',
+                        date: 'Jan 31',
+                        severity: 'medium',
+                        tag: 'With breakfast',
+                        onPrimary: () => _showNotImplemented(context),
+                        onSecondary: () => _showNotImplemented(context),
+                        primaryLabel: 'Done',
+                        secondaryLabel: 'Reschedule',
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    _orderedSection(
+                      7,
+                      _TaskCard(
+                        icon: Icons.restaurant_menu,
+                        title: 'Prepare Lunch',
+                        description: 'Low-sodium, diabetic-friendly meal',
+                        time: '12:00 PM',
+                        date: 'Jan 31',
+                        severity: 'medium',
+                        tag: 'With lunch',
+                        onPrimary: () => _showNotImplemented(context),
+                        onSecondary: () => _showNotImplemented(context),
+                        primaryLabel: 'Done',
+                        secondaryLabel: 'Reschedule',
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
+          ],
+        ),
+        bottomNavigationBar: _orderedSection(
+          8,
+          _TasksBottomBar(
+            onTap: (index) => _onNavTap(context, index),
+            onNowTap: () => _showNotImplemented(context),
           ),
-        ],
-      ),
-      bottomNavigationBar: _TasksBottomBar(
-        onTap: (index) => _onNavTap(context, index),
-        onNowTap: () => _showNotImplemented(context),
+        ),
       ),
     );
   }
@@ -246,13 +305,7 @@ class _StatusCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 6),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 13,
-              color: _mutedText,
-            ),
-          ),
+          Text(label, style: const TextStyle(fontSize: 13, color: _mutedText)),
         ],
       ),
     );
@@ -307,12 +360,17 @@ class _AlertCard extends StatelessWidget {
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.black87,
               backgroundColor: Colors.white,
+              minimumSize: const Size(48, 48),
               side: const BorderSide(color: _cardBorder),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text('View'),
+            child: Semantics(
+              button: true,
+              label: 'View overdue tasks',
+              child: Text('View'),
+            ),
           ),
         ],
       ),
@@ -321,10 +379,7 @@ class _AlertCard extends StatelessWidget {
 }
 
 class _NowTaskCard extends StatelessWidget {
-  const _NowTaskCard({
-    required this.onStart,
-    required this.onSnooze,
-  });
+  const _NowTaskCard({required this.onStart, required this.onSnooze});
 
   final VoidCallback onStart;
   final VoidCallback onSnooze;
@@ -357,8 +412,11 @@ class _NowTaskCard extends StatelessWidget {
                   color: _headerColor,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.notifications_none,
-                    color: Colors.white, size: 18),
+                child: const Icon(
+                  Icons.notifications_none,
+                  color: Colors.white,
+                  size: 18,
+                ),
               ),
               const SizedBox(width: 10),
               const _TagChip(
@@ -367,8 +425,11 @@ class _NowTaskCard extends StatelessWidget {
                 foreground: Colors.white,
               ),
               const SizedBox(width: 10),
-              const Icon(Icons.local_hospital_outlined,
-                  size: 18, color: _mutedText),
+              const Icon(
+                Icons.local_hospital_outlined,
+                size: 18,
+                color: _mutedText,
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -381,58 +442,69 @@ class _NowTaskCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 6),
-          Row(
+          Wrap(
+            spacing: 8,
+            runSpacing: 6,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: const [
               Text(
                 'Due now',
                 style: TextStyle(fontSize: 13, color: _mutedText),
               ),
-              SizedBox(width: 8),
               Text('•', style: TextStyle(color: _mutedText)),
-              SizedBox(width: 8),
               Icon(Icons.schedule, size: 14, color: _mutedText),
-              SizedBox(width: 4),
-              Text('02:00 PM',
-                  style: TextStyle(fontSize: 13, color: _mutedText)),
-              SizedBox(width: 8),
+              Text(
+                '02:00 PM',
+                style: TextStyle(fontSize: 13, color: _mutedText),
+              ),
               Text('•', style: TextStyle(color: _mutedText)),
-              SizedBox(width: 8),
               Icon(Icons.location_on_outlined, size: 14, color: _mutedText),
-              SizedBox(width: 4),
-              Text('At clinic',
-                  style: TextStyle(fontSize: 13, color: _mutedText)),
+              Text(
+                'At clinic',
+                style: TextStyle(fontSize: 13, color: _mutedText),
+              ),
             ],
           ),
           const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
-                child: ElevatedButton(
-                  onPressed: onStart,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _headerColor,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                child: Semantics(
+                  button: true,
+                  label: 'Start physical therapy appointment',
+                  child: ElevatedButton(
+                    onPressed: onStart,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _headerColor,
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(0, 48),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
+                    child: const Text('Start'),
                   ),
-                  child: const Text('Start'),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: OutlinedButton(
-                  onPressed: onSnooze,
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.black87,
-                    side: const BorderSide(color: _cardBorder),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                child: Semantics(
+                  button: true,
+                  label: 'Snooze appointment for 10 minutes',
+                  child: OutlinedButton(
+                    onPressed: onSnooze,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.black87,
+                      minimumSize: const Size(0, 48),
+                      side: const BorderSide(color: _cardBorder),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
+                    child: const Text('Snooze 10 min'),
                   ),
-                  child: const Text('Snooze 10 min'),
                 ),
               ),
             ],
@@ -444,10 +516,7 @@ class _NowTaskCard extends StatelessWidget {
 }
 
 class _FilterPill extends StatelessWidget {
-  const _FilterPill({
-    required this.label,
-    this.selected = false,
-  });
+  const _FilterPill({required this.label, this.selected = false});
 
   final String label;
   final bool selected;
@@ -554,10 +623,7 @@ class _TaskCard extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text(
                       description,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: _mutedText,
-                      ),
+                      style: const TextStyle(fontSize: 13, color: _mutedText),
                     ),
                   ],
                 ),
@@ -566,18 +632,32 @@ class _TaskCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.schedule, size: 14, color: _mutedText),
-              const SizedBox(width: 4),
-              Text(time,
-                  style: const TextStyle(fontSize: 12, color: _mutedText)),
-              const SizedBox(width: 12),
-              const Icon(Icons.calendar_today_outlined,
-                  size: 14, color: _mutedText),
-              const SizedBox(width: 4),
-              Text(date,
-                  style: const TextStyle(fontSize: 12, color: _mutedText)),
-              const Spacer(),
+              Expanded(
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 6,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    const Icon(Icons.schedule, size: 14, color: _mutedText),
+                    Text(
+                      time,
+                      style: const TextStyle(fontSize: 12, color: _mutedText),
+                    ),
+                    const Icon(
+                      Icons.calendar_today_outlined,
+                      size: 14,
+                      color: _mutedText,
+                    ),
+                    Text(
+                      date,
+                      style: const TextStyle(fontSize: 12, color: _mutedText),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
               _TagChip(
                 label: severity,
                 background: _headerColor,
@@ -596,32 +676,42 @@ class _TaskCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: ElevatedButton(
-                  onPressed: onPrimary,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _headerColor,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                child: Semantics(
+                  button: true,
+                  label: '$primaryLabel task $title',
+                  child: ElevatedButton(
+                    onPressed: onPrimary,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _headerColor,
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(0, 48),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
+                    child: Text(primaryLabel),
                   ),
-                  child: Text(primaryLabel),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: OutlinedButton(
-                  onPressed: onSecondary,
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.black87,
-                    side: const BorderSide(color: _cardBorder),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                child: Semantics(
+                  button: true,
+                  label: '$secondaryLabel task $title',
+                  child: OutlinedButton(
+                    onPressed: onSecondary,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.black87,
+                      minimumSize: const Size(0, 48),
+                      side: const BorderSide(color: _cardBorder),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
+                    child: Text(secondaryLabel),
                   ),
-                  child: Text(secondaryLabel),
                 ),
               ),
             ],
@@ -669,10 +759,7 @@ class _TagChip extends StatelessWidget {
 }
 
 class _TasksBottomBar extends StatelessWidget {
-  const _TasksBottomBar({
-    required this.onTap,
-    required this.onNowTap,
-  });
+  const _TasksBottomBar({required this.onTap, required this.onNowTap});
 
   final ValueChanged<int> onTap;
   final VoidCallback onNowTap;
@@ -690,7 +777,7 @@ class _TasksBottomBar extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Icon(Icons.schedule, color: Colors.white70, size: 18),
+              const Icon(Icons.schedule, color: _onHeaderSecondary, size: 18),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -709,30 +796,34 @@ class _TasksBottomBar extends StatelessWidget {
                       spacing: 6,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        Icon(Icons.schedule, size: 12, color: Colors.white70),
+                        Icon(
+                          Icons.schedule,
+                          size: 12,
+                          color: _onHeaderSecondary,
+                        ),
                         Text(
                           '02:00 PM',
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: _onHeaderSecondary,
                             fontSize: 11,
                           ),
                         ),
                         Text(
                           '•',
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: _onHeaderSecondary,
                             fontSize: 11,
                           ),
                         ),
                         Icon(
                           Icons.local_hospital_outlined,
                           size: 12,
-                          color: Colors.white70,
+                          color: _onHeaderSecondary,
                         ),
                         Text(
                           'At clinic',
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: _onHeaderSecondary,
                             fontSize: 11,
                           ),
                         ),
@@ -741,20 +832,23 @@ class _TasksBottomBar extends StatelessWidget {
                   ],
                 ),
               ),
-              TextButton(
-                onPressed: onNowTap,
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.zero,
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: Row(
-                  children: const [
-                    Text('View'),
-                    SizedBox(width: 4),
-                    Icon(Icons.arrow_forward, size: 14),
-                  ],
+              Semantics(
+                button: true,
+                label: 'View current appointment',
+                child: TextButton(
+                  onPressed: onNowTap,
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(48, 48),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                  ),
+                  child: Row(
+                    children: const [
+                      Text('View'),
+                      SizedBox(width: 4),
+                      Icon(Icons.arrow_forward, size: 14),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -768,7 +862,7 @@ class _TasksBottomBar extends StatelessWidget {
               currentIndex: 1,
               type: BottomNavigationBarType.fixed,
               selectedItemColor: AppColors.primary,
-                unselectedItemColor: _mutedText,
+              unselectedItemColor: _mutedText,
               backgroundColor: Colors.white,
               elevation: 0,
               onTap: onTap,
