@@ -13,6 +13,23 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePassword = true;
   bool _rememberMe = false;
+  final FocusNode _initialFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _initialFocusNode.canRequestFocus) {
+        _initialFocusNode.requestFocus();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _initialFocusNode.dispose();
+    super.dispose();
+  }
 
   void _showNotImplemented(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -119,6 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Semantics(
                               label: 'Email Address',
                               child: TextField(
+                                focusNode: _initialFocusNode,
                                 keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
                                   hintText: 'you@example.com',

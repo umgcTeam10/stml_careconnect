@@ -4,8 +4,31 @@ import '../widgets/app_logo_badge.dart';
 import '../widgets/feature_row.dart';
 import '../widgets/primary_button.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
+
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  final FocusNode _initialFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _initialFocusNode.canRequestFocus) {
+        _initialFocusNode.requestFocus();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _initialFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,16 +73,22 @@ class WelcomeScreen extends StatelessWidget {
                               children: [
                                 AppLogoBadge.square(),
                                 const SizedBox(height: 16),
-                                Semantics(
-                                  header: true,
-                                  child: const Text(
-                                    'CareConnect',
-                                    style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                    textAlign: TextAlign.center,
+                                Focus(
+                                  focusNode: _initialFocusNode,
+                                  child: FocusableActionDetector(
+                                    focusNode: _initialFocusNode,
+                                    child: Semantics(
+                                      header: true,
+                                      child: const Text(
+                                        'CareConnect',
+                                        style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(height: 8),

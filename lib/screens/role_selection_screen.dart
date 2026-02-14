@@ -14,6 +14,23 @@ class RoleSelectionScreen extends StatefulWidget {
 
 class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
   UserRole? _selectedRole;
+  final FocusNode _initialFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _initialFocusNode.canRequestFocus) {
+        _initialFocusNode.requestFocus();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _initialFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,15 +79,21 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    Semantics(
-                      header: true,
-                      child: const Center(
-                        child: Text(
-                          'Choose Your Role',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                    Focus(
+                      focusNode: _initialFocusNode,
+                      child: FocusableActionDetector(
+                        focusNode: _initialFocusNode,
+                        child: Semantics(
+                          header: true,
+                          child: const Center(
+                            child: Text(
+                              'Choose Your Role',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
                           ),
                         ),
                       ),
