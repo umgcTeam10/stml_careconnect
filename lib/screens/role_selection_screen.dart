@@ -82,7 +82,6 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                     Focus(
                       focusNode: _initialFocusNode,
                       child: FocusableActionDetector(
-                        focusNode: _initialFocusNode,
                         child: Semantics(
                           header: true,
                           child: const Center(

@@ -76,7 +76,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 Focus(
                                   focusNode: _initialFocusNode,
                                   child: FocusableActionDetector(
-                                    focusNode: _initialFocusNode,
                                     child: Semantics(
                                       header: true,
                                       child: const Text(
