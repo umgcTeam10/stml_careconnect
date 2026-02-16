@@ -1,5 +1,6 @@
 class AppRoutes {
   static const welcome = '/';
+  static const roleSelection = '/role-selection';
   static const login = '/login';
   static const signup = '/signup';
   static const dashboard = '/dashboard';

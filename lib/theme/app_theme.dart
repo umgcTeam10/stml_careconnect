@@ -30,6 +30,7 @@ class AppTheme {
   static final ThemeData light = ThemeData(
     brightness: Brightness.light,
     primaryColor: AppColors.primary,
+    colorScheme: ColorScheme.light(primary: AppColors.primary),
     scaffoldBackgroundColor: AppColors.lightBackground,
     cardColor: AppColors.lightCard,
     appBarTheme: const AppBarTheme(
@@ -57,6 +58,7 @@ class AppTheme {
   static final ThemeData dark = ThemeData(
     brightness: Brightness.dark,
     primaryColor: AppColors.primary,
+    colorScheme: ColorScheme.dark(primary: AppColors.primary),
     scaffoldBackgroundColor: AppColors.darkBackground,
     cardColor: AppColors.darkCard,
     appBarTheme: const AppBarTheme(
