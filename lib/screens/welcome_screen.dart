@@ -139,6 +139,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                         AppRoutes.login,
                                       );
                                     },
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: Colors.white,
+                                    ),
                                     child: const Text('Log in'),
                                   ),
                                 ),
