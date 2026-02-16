@@ -241,13 +241,6 @@ void main() {
     ) async {
       await tester.pumpWidget(MaterialApp(home: const HealthLogsScreen()));
 
-      // Scroll to make the element visible
-      await tester.dragUntilVisible(
-        find.text('Blood Pressure'),
-        find.byType(SingleChildScrollView),
-        const Offset(0, -50),
-      );
-
       final bpEntry = find.text('Blood Pressure');
       expect(bpEntry, findsOneWidget);
 
@@ -265,13 +258,6 @@ void main() {
     ) async {
       await tester.pumpWidget(MaterialApp(home: const HealthLogsScreen()));
 
-      // Scroll to make the element visible
-      await tester.dragUntilVisible(
-        find.text('Mood Check'),
-        find.byType(SingleChildScrollView),
-        const Offset(0, -50),
-      );
-
       final moodEntry = find.text('Mood Check');
       expect(moodEntry, findsOneWidget);
 
@@ -288,13 +274,6 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(MaterialApp(home: const HealthLogsScreen()));
-
-      // Scroll to make the element visible
-      await tester.dragUntilVisible(
-        find.text('Medication Taken'),
-        find.byType(SingleChildScrollView),
-        const Offset(0, -50),
-      );
 
       final medEntry = find.text('Medication Taken');
       expect(medEntry, findsOneWidget);
@@ -419,10 +398,11 @@ void main() {
       final backButton = find.byIcon(Icons.arrow_back);
       expect(backButton, findsOneWidget);
 
+      // Check semantics using semantics finder
       expect(find.bySemanticsLabel(RegExp(r'Back')), findsOneWidget);
     });
 
-    testWidgets('Health Logs title has header semantics', (
+    testWidgets('Health Logs title is marked as header', (
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(MaterialApp(home: const HealthLogsScreen()));
@@ -430,8 +410,9 @@ void main() {
       final title = find.text('Health Logs');
       expect(title, findsOneWidget);
 
-      // Verify title exists (header flag is internal to Flutter)
-      expect(find.text('Health Logs'), findsOneWidget);
+      // Verify header semantics
+      final semantics = tester.getSemantics(title);
+      expect(semantics.isHeader, true);
     });
 
     testWidgets('New button has accessibility semantics', (
@@ -439,11 +420,10 @@ void main() {
     ) async {
       await tester.pumpWidget(MaterialApp(home: const HealthLogsScreen()));
 
-      // Check that at least one widget has "Add new health log" label
-      // (could be either the "New" button or FAB)
+      // Check for semantic label
       expect(
         find.bySemanticsLabel(RegExp(r'Add new health log')),
-        findsAtLeastNWidgets(1),
+        findsOneWidget,
       );
     });
 
@@ -452,6 +432,7 @@ void main() {
     ) async {
       await tester.pumpWidget(MaterialApp(home: const HealthLogsScreen()));
 
+      // Check for semantic label with blood pressure info
       expect(
         find.bySemanticsLabel(RegExp(r'Blood pressure today.*120 over 80')),
         findsOneWidget,
@@ -582,6 +563,7 @@ void main() {
       await tester.tap(vitalsTab);
       await tester.pump();
 
+      // After selecting Vitals tab, it should have "selected" in label
       expect(
         find.bySemanticsLabel(RegExp(r'Vitals filter.*selected')),
         findsOneWidget,

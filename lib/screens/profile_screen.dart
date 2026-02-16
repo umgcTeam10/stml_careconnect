@@ -648,7 +648,7 @@ class _PreferenceToggle extends StatelessWidget {
             child: Switch(
               value: value,
               onChanged: onChanged,
-              activeColor: AppColors.primary,
+              activeThumbColor: AppColors.primary,
             ),
           ),
         ],
