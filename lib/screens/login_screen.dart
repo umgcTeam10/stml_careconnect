@@ -13,6 +13,23 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePassword = true;
   bool _rememberMe = false;
+  final FocusNode _initialFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _initialFocusNode.canRequestFocus) {
+        _initialFocusNode.requestFocus();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _initialFocusNode.dispose();
+    super.dispose();
+  }
 
   void _showNotImplemented(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -34,10 +51,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextButton.icon(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.arrow_back, size: 18),
-                      label: const Text('Back'),
+                    Semantics(
+                      label: 'Back',
+                      button: true,
+                      child: TextButton.icon(
+                        onPressed: () => Navigator.pop(context),
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.black87,
+                        ),
+                        icon: const Icon(Icons.arrow_back, size: 18),
+                        label: const Text('Back'),
+                      ),
                     ),
                     const SizedBox(height: 12),
                     Center(
@@ -49,13 +73,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             Center(child: AppLogoBadge.circle()),
                             const SizedBox(height: 16),
-                            const Center(
-                              child: Text(
-                                'Welcome Back',
-                                style: TextStyle(
+                            Center(
+                              child: Semantics(
+                                header: true,
+                                child: const Text(
+                                  'Welcome Back',
+                                  style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black87,
+                                  ),
                                 ),
                               ),
                             ),
@@ -109,17 +136,21 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            TextField(
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: InputDecoration(
-                                hintText: 'you@example.com',
-                                filled: true,
+                            Semantics(
+                              label: 'Email Address',
+                              child: TextField(
+                                focusNode: _initialFocusNode,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                  hintText: 'you@example.com',
+                                  filled: true,
                                 fillColor: const Color(0xFFF5F7FB),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide.none,
                                 ),
                               ),
+                            ),
                             ),
                             const SizedBox(height: 16),
                             const Text(
@@ -131,25 +162,38 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            TextField(
-                              obscureText: _obscurePassword,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: const Color(0xFFF5F7FB),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide.none,
-                                ),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscurePassword = !_obscurePassword;
-                                    });
-                                  },
-                                  icon: Icon(
-                                    _obscurePassword
-                                        ? Icons.visibility_off_outlined
-                                        : Icons.visibility_outlined,
+                            Semantics(
+                              label: 'Password',
+                              child: TextField(
+                                obscureText: _obscurePassword,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: const Color(0xFFF5F7FB),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  suffixIcon: Semantics(
+                                    label: _obscurePassword
+                                        ? 'Show password'
+                                        : 'Hide password',
+                                    button: true,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _obscurePassword =
+                                              !_obscurePassword;
+                                        });
+                                      },
+                                      icon: Icon(
+                                        _obscurePassword
+                                            ? Icons.visibility_off_outlined
+                                            : Icons.visibility_outlined,
+                                      ),
+                                      tooltip: _obscurePassword
+                                          ? 'Show password'
+                                          : 'Hide password',
+                                    ),
                                   ),
                                 ),
                               ),
@@ -157,25 +201,32 @@ class _LoginScreenState extends State<LoginScreen> {
                             const SizedBox(height: 12),
                             Row(
                               children: [
-                                Checkbox(
-                                  value: _rememberMe,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _rememberMe = value ?? false;
-                                    });
-                                  },
-                                ),
-                                const Text(
-                                  'Remember me',
-                                  style: TextStyle(color: Colors.black87),
+                                MergeSemantics(
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Checkbox(
+                                        value: _rememberMe,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _rememberMe = value ?? false;
+                                          });
+                                        },
+                                      ),
+                                      const Text(
+                                        'Remember me',
+                                        style: TextStyle(color: Colors.black87),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 const Spacer(),
                                 TextButton(
                                   onPressed: () => _showNotImplemented(context),
-                                  child: const Text(
-                                    'Forgot password?',
-                                    style: TextStyle(color: Colors.black87),
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.black87,
                                   ),
+                                  child: const Text('Forgot password?'),
                                 ),
                               ],
                             ),
@@ -185,7 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: () {
                                 Navigator.pushReplacementNamed(
                                   context,
-                                  AppRoutes.signup,
+                                  AppRoutes.dashboard,
                                 );
                               },
                             ),
@@ -201,6 +252,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       AppRoutes.signup,
                                     );
                                   },
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.black87,
+                                  ),
                                   child: const Text('Sign up'),
                                 ),
                               ],

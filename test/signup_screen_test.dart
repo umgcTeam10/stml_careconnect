@@ -17,21 +17,24 @@ void main() {
     expect(find.text('Continue'), findsOneWidget);
   });
 
-    testWidgets('Selecting role updates selection state (smoke)', (tester) async {
+  testWidgets('Selecting role updates selection state (smoke)', (tester) async {
     await tester.pumpWidget(const MaterialApp(home: SignUpScreen()));
 
-        // Tap caregiver card (covers lines 76–78)
-    await tester.tap(find.text("I'm a Caregiver"));
+    // Tap caregiver card (covers lines 76–78)
+    final caregiverFinder = find.text("I'm a Caregiver");
+    await tester.ensureVisible(caregiverFinder);
+    await tester.tap(caregiverFinder);
     await tester.pumpAndSettle();
 
-    // Tap recipient card (covers lines 94–96)
-
-    // Tap the recipient card.
-    await tester.tap(find.text("I'm a Care Recipient"));
+    // Tap recipient card (covers lines 94–96) — scroll into view first (off-screen in default test bounds)
+    final recipientFinder = find.text("I'm a Care Recipient");
+    await tester.ensureVisible(recipientFinder);
+    await tester.tap(recipientFinder);
     await tester.pumpAndSettle();
 
     // Tapping again should not crash and keeps UI stable.
-    await tester.tap(find.text("I'm a Care Recipient"));
+    await tester.ensureVisible(recipientFinder);
+    await tester.tap(recipientFinder);
     await tester.pump();
 
     // Basic sanity: bullets should still be visible.
