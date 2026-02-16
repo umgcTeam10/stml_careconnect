@@ -56,6 +56,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       button: true,
                       child: TextButton.icon(
                         onPressed: () => Navigator.pop(context),
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.black87,
+                        ),
                         icon: const Icon(Icons.arrow_back, size: 18),
                         label: const Text('Back'),
                       ),
@@ -220,10 +223,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 const Spacer(),
                                 TextButton(
                                   onPressed: () => _showNotImplemented(context),
-                                  child: const Text(
-                                    'Forgot password?',
-                                    style: TextStyle(color: Colors.black87),
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.black87,
                                   ),
+                                  child: const Text('Forgot password?'),
                                 ),
                               ],
                             ),
@@ -249,6 +252,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       AppRoutes.signup,
                                     );
                                   },
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.black87,
+                                  ),
                                   child: const Text('Sign up'),
                                 ),
                               ],
