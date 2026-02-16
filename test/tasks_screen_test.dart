@@ -5,11 +5,7 @@ import 'package:stml_careconnect/screens/tasks_screen.dart';
 
 void main() {
   testWidgets('Tasks shows overview actions', (tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: TasksScreen(),
-      ),
-    );
+    await tester.pumpWidget(const MaterialApp(home: TasksScreen()));
 
     expect(find.text('Add Task'), findsOneWidget);
     expect(find.text('You have 2 overdue tasks'), findsOneWidget);
@@ -17,11 +13,7 @@ void main() {
   });
 
   testWidgets('Tasks shows task cards', (tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: TasksScreen(),
-      ),
-    );
+    await tester.pumpWidget(const MaterialApp(home: TasksScreen()));
 
     expect(find.text('Blood Pressure Check'), findsOneWidget);
     expect(find.text('Prepare Lunch'), findsOneWidget);
@@ -29,7 +21,7 @@ void main() {
     expect(find.text('With breakfast'), findsOneWidget);
     expect(find.text('With lunch'), findsOneWidget);
   });
-    testWidgets('Add Task shows not implemented snackbar', (tester) async {
+  testWidgets('Add Task shows not implemented snackbar', (tester) async {
     await tester.pumpWidget(const MaterialApp(home: TasksScreen()));
 
     await tester.tap(find.text('Add Task'));
@@ -38,7 +30,7 @@ void main() {
     expect(find.text('Not implemented in Week 4'), findsOneWidget);
   });
 
-    MaterialApp _wrap() {
+  MaterialApp wrap() {
     return MaterialApp(
       home: const TasksScreen(),
       routes: {
@@ -49,5 +41,4 @@ void main() {
       },
     );
   }
- 
 }
