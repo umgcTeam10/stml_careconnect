@@ -4,56 +4,12 @@ import 'package:stml_careconnect/app/app_routes.dart';
 import 'package:stml_careconnect/screens/calendar_screen.dart';
 
 void main() {
-  testWidgets('Calendar shows month header and schedule', (tester) async {
-    await tester.pumpWidget(const MaterialApp(home: CalendarScreen()));
-
-    expect(find.text('January 2026'), findsOneWidget);
-    expect(find.text("Today's Schedule"), findsOneWidget);
-    expect(find.text('Morning Medication'), findsOneWidget);
-  });
-
-  testWidgets('Calendar month navigation updates label', (tester) async {
-    await tester.pumpWidget(const MaterialApp(home: CalendarScreen()));
-
-    expect(find.text('January 2026'), findsOneWidget);
-
-    await tester.tap(find.byIcon(Icons.chevron_right));
-    await tester.pumpAndSettle();
-
-    expect(find.text('February 2026'), findsOneWidget);
-
-    await tester.tap(find.byIcon(Icons.chevron_left));
-    await tester.pumpAndSettle();
-
-    expect(find.text('January 2026'), findsOneWidget);
-  });
-  // ✅ ADD BELOW (snackbar path)
-  testWidgets('Calendar Now banner View shows not implemented snackbar', (
-    tester,
-  ) async {
-    await tester.pumpWidget(const MaterialApp(home: CalendarScreen()));
-
-    await tester.tap(find.text('View'));
-    await tester.pump();
-
-    expect(find.text('Not implemented in Week 4'), findsOneWidget);
-  });
-
-  testWidgets('Calendar renders empty cells (SizedBox.shrink) in grid', (
-    tester,
-  ) async {
-    await tester.pumpWidget(const MaterialApp(home: CalendarScreen()));
-
-    expect(
-      find.byWidgetPredicate(
-        (w) => w is SizedBox && w.width == 0 && w.height == 0,
-      ),
-      findsWidgets,
-    );
-  });
-  MaterialApp wrap() {
+  MaterialApp _wrap({double textScale = 1.0}) {
     return MaterialApp(
-      home: const CalendarScreen(),
+      home: MediaQuery(
+        data: MediaQueryData(textScaler: TextScaler.linear(textScale)),
+        child: const CalendarScreen(),
+      ),
       routes: {
         AppRoutes.dashboard: (_) => const Scaffold(body: Text('Dashboard')),
         AppRoutes.tasks: (_) => const Scaffold(body: Text('Tasks')),
@@ -64,32 +20,59 @@ void main() {
   }
 
   testWidgets('Calendar shows month header and schedule', (tester) async {
-    await tester.pumpWidget(wrap());
+    await tester.pumpWidget(_wrap());
 
     expect(find.text('January 2026'), findsOneWidget);
     expect(find.text("Today's Schedule"), findsOneWidget);
     expect(find.text('Morning Medication'), findsOneWidget);
   });
 
-  testWidgets('Month navigation updates label and keeps selected day valid', (
-    tester,
-  ) async {
-    await tester.pumpWidget(wrap());
+  testWidgets('Calendar month navigation updates label', (tester) async {
+    await tester.pumpWidget(_wrap());
 
-    await tester.tap(find.byIcon(Icons.chevron_right));
+    await tester.tap(find.byTooltip('Next month'));
     await tester.pumpAndSettle();
     expect(find.text('February 2026'), findsOneWidget);
 
-    await tester.tap(find.byIcon(Icons.chevron_left));
+    await tester.tap(find.byTooltip('Previous month'));
     await tester.pumpAndSettle();
     expect(find.text('January 2026'), findsOneWidget);
   });
 
-  testWidgets('Now banner View shows snackbar', (tester) async {
-    await tester.pumpWidget(wrap());
+  testWidgets('Calendar now banner View shows snackbar', (tester) async {
+    await tester.pumpWidget(_wrap());
 
-    await tester.tap(find.text('View').first);
+    await tester.tap(find.text('View'));
     await tester.pump();
+
     expect(find.text('Not implemented in Week 4'), findsOneWidget);
+  });
+
+  testWidgets('Calendar renders empty cells in grid', (tester) async {
+    await tester.pumpWidget(_wrap());
+
+    expect(
+      find.byWidgetPredicate(
+        (w) => w is SizedBox && w.width == 0 && w.height == 0,
+      ),
+      findsWidgets,
+    );
+  });
+
+  testWidgets('Calendar supports 200% text scaling', (tester) async {
+    await tester.pumpWidget(_wrap(textScale: 2.0));
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Calendar follows Flutter accessibility guidelines', (
+    tester,
+  ) async {
+    await tester.pumpWidget(_wrap());
+
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(textContrastGuideline));
   });
 }

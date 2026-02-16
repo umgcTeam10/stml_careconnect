@@ -11,6 +11,11 @@ const _chipBlue = Color(0xFFE6F0FF);
 const _chipBlueText = Color(0xFF2F5DA8);
 const _chipTeal = Color(0xFF0E7C9A);
 const _calendarSelected = Color(0xFF0F4C81);
+const _onHeaderSecondary = Color(0xFFDDE9FB);
+
+Widget _orderedSection(double order, Widget child) {
+  return FocusTraversalOrder(order: NumericFocusOrder(order), child: child);
+}
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -23,14 +28,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
   DateTime _focusedMonth = DateTime(2026, 1, 1);
   DateTime _selectedDate = DateTime(2026, 1, 26);
 
-  final List<DateTime> _eventDates = [
-    DateTime(2026, 1, 27),
-  ];
+  final List<DateTime> _eventDates = [DateTime(2026, 1, 27)];
 
   void _showNotImplemented(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Not implemented in Week 4')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Not implemented in Week 4')));
   }
 
   void _onNavTap(BuildContext context, int index) {
@@ -54,13 +57,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   void _changeMonth(int offset) {
     setState(() {
-      _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month + offset);
+      _focusedMonth = DateTime(
+        _focusedMonth.year,
+        _focusedMonth.month + offset,
+      );
       final int daysInMonth = DateUtils.getDaysInMonth(
         _focusedMonth.year,
         _focusedMonth.month,
       );
-      final int safeDay =
-          _selectedDate.day.clamp(1, daysInMonth).toInt();
+      final int safeDay = _selectedDate.day.clamp(1, daysInMonth).toInt();
       _selectedDate = DateTime(
         _focusedMonth.year,
         _focusedMonth.month,
@@ -100,11 +105,50 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return '${months[date.month - 1]} ${date.year}';
   }
 
+  String _monthName(int month) {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    return months[month - 1];
+  }
+
+  String _weekdayName(int weekday) {
+    const weekdays = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ];
+    return weekdays[weekday % 7];
+  }
+
+  String _daySemanticLabel(_CalendarDay day) {
+    if (day.date == null) {
+      return '';
+    }
+    final date = day.date!;
+    final eventLabel = day.showDot ? ', has event' : '';
+    return '${_weekdayName(date.weekday)}, ${_monthName(date.month)} ${date.day}, ${date.year}$eventLabel';
+  }
+
   List<_CalendarDay> _buildDays(DateTime month) {
     final firstDay = DateTime(month.year, month.month, 1);
     final int leading = firstDay.weekday % 7;
-    final int daysInMonth =
-        DateUtils.getDaysInMonth(month.year, month.month);
+    final int daysInMonth = DateUtils.getDaysInMonth(month.year, month.month);
     final int totalCells = leading + daysInMonth;
     final int trailing = (7 - (totalCells % 7)) % 7;
     final int gridCount = totalCells + trailing;
@@ -137,195 +181,272 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Widget build(BuildContext context) {
     final days = _buildDays(_focusedMonth);
 
-    return Scaffold(
-      backgroundColor: AppColors.lightBackground,
-      body: Column(
-        children: [
-          SafeArea(
-            bottom: false,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.arrow_back, color: Colors.black87),
-                  ),
-                  const SizedBox(width: 4),
-                  const Text(
-                    'Calendar',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+    return FocusTraversalGroup(
+      policy: OrderedTraversalPolicy(),
+      child: Scaffold(
+        backgroundColor: AppColors.lightBackground,
+        body: Column(
+          children: [
+            SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                child: Row(
+                  children: [
+                    _orderedSection(
+                      1,
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        tooltip: 'Back',
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.black87,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 4),
+                    const Text(
+                      'Calendar',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          const Divider(height: 1, color: _cardBorder),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: _cardBorder),
-                    ),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          onPressed: () => _changeMonth(-1),
-                          icon: const Icon(Icons.chevron_left),
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              _monthLabel(_focusedMonth),
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87,
+            const Divider(height: 1, color: _cardBorder),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(8, 16, 8, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: _cardBorder),
+                      ),
+                      child: Row(
+                        children: [
+                          _orderedSection(
+                            2,
+                            IconButton(
+                              onPressed: () => _changeMonth(-1),
+                              tooltip: 'Previous month',
+                              icon: const Icon(Icons.chevron_left),
+                            ),
+                          ),
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                _monthLabel(_focusedMonth),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black87,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () => _changeMonth(1),
-                          icon: const Icon(Icons.chevron_right),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: _cardBorder),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            _WeekdayLabel('Sun'),
-                            _WeekdayLabel('Mon'),
-                            _WeekdayLabel('Tue'),
-                            _WeekdayLabel('Wed'),
-                            _WeekdayLabel('Thu'),
-                            _WeekdayLabel('Fri'),
-                            _WeekdayLabel('Sat'),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: days.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 7,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 10,
+                          _orderedSection(
+                            3,
+                            IconButton(
+                              onPressed: () => _changeMonth(1),
+                              tooltip: 'Next month',
+                              icon: const Icon(Icons.chevron_right),
+                            ),
                           ),
-                          itemBuilder: (context, index) {
-                            final day = days[index];
-                            return _CalendarCell(
-                              day: day,
-                              onSelected: () {
-                                if (day.date != null) {
-                                  _onDaySelected(day.date!);
-                                }
-                              },
-                            );
-                          },
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 18),
-                  const Text(
-                    "Today's Schedule",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                    const SizedBox(height: 16),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: _cardBorder),
+                      ),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          const minCalendarWidth = 384.0;
+                          final calendarWidth =
+                              constraints.maxWidth < minCalendarWidth
+                              ? minCalendarWidth
+                              : constraints.maxWidth;
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: SizedBox(
+                              width: calendarWidth,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: const [
+                                      Expanded(
+                                        child: _WeekdayLabel(
+                                          'Sun',
+                                          semanticLabel: 'Sunday',
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: _WeekdayLabel(
+                                          'Mon',
+                                          semanticLabel: 'Monday',
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: _WeekdayLabel(
+                                          'Tue',
+                                          semanticLabel: 'Tuesday',
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: _WeekdayLabel(
+                                          'Wed',
+                                          semanticLabel: 'Wednesday',
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: _WeekdayLabel(
+                                          'Thu',
+                                          semanticLabel: 'Thursday',
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: _WeekdayLabel(
+                                          'Fri',
+                                          semanticLabel: 'Friday',
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: _WeekdayLabel(
+                                          'Sat',
+                                          semanticLabel: 'Saturday',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  GridView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: days.length,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 7,
+                                          mainAxisSpacing: 8,
+                                          crossAxisSpacing: 8,
+                                          childAspectRatio: 1,
+                                        ),
+                                    itemBuilder: (context, index) {
+                                      final day = days[index];
+                                      return _CalendarCell(
+                                        day: day,
+                                        semanticLabel: _daySemanticLabel(day),
+                                        focusOrder: 10 + index.toDouble(),
+                                        onSelected: () {
+                                          if (day.date != null) {
+                                            _onDaySelected(day.date!);
+                                          }
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  const _ScheduleCard(
-                    title: 'Morning Medication',
-                    time: '08:00 AM',
-                    icon: Icons.calendar_today_outlined,
-                    tagLabel: 'high',
-                    tagBackground: _chipRed,
-                    tagForeground: _chipRedText,
-                  ),
-                  const SizedBox(height: 12),
-                  const _ScheduleCard(
-                    title: 'Physical Therapy\nAppointment',
-                    time: '02:00 PM',
-                    icon: Icons.calendar_today_outlined,
-                    tagLabel: 'high',
-                    tagBackground: _chipRed,
-                    tagForeground: _chipRedText,
-                  ),
-                  const SizedBox(height: 12),
-                  const _ScheduleCard(
-                    title: 'Evening Walk',
-                    time: '05:30 PM',
-                    icon: Icons.calendar_today_outlined,
-                    tagLabel: 'medium',
-                    tagBackground: _chipBlue,
-                    tagForeground: _chipBlueText,
-                  ),
-                  const SizedBox(height: 12),
-                  const _ScheduleCard(
-                    title: 'Physical Therapy',
-                    time: '02:00 PM',
-                    icon: Icons.local_hospital_outlined,
-                    tagLabel: 'therapy',
-                    tagBackground: Color(0xFFF1F5F9),
-                    tagForeground: Color(0xFF334155),
-                  ),
-                ],
+                    const SizedBox(height: 18),
+                    const Text(
+                      "Today's Schedule",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    const _ScheduleCard(
+                      title: 'Morning Medication',
+                      time: '08:00 AM',
+                      icon: Icons.calendar_today_outlined,
+                      tagLabel: 'high',
+                      tagBackground: _chipRed,
+                      tagForeground: _chipRedText,
+                    ),
+                    const SizedBox(height: 12),
+                    const _ScheduleCard(
+                      title: 'Physical Therapy\nAppointment',
+                      time: '02:00 PM',
+                      icon: Icons.calendar_today_outlined,
+                      tagLabel: 'high',
+                      tagBackground: _chipRed,
+                      tagForeground: _chipRedText,
+                    ),
+                    const SizedBox(height: 12),
+                    const _ScheduleCard(
+                      title: 'Evening Walk',
+                      time: '05:30 PM',
+                      icon: Icons.calendar_today_outlined,
+                      tagLabel: 'medium',
+                      tagBackground: _chipBlue,
+                      tagForeground: _chipBlueText,
+                    ),
+                    const SizedBox(height: 12),
+                    const _ScheduleCard(
+                      title: 'Physical Therapy',
+                      time: '02:00 PM',
+                      icon: Icons.local_hospital_outlined,
+                      tagLabel: 'therapy',
+                      tagBackground: Color(0xFFF1F5F9),
+                      tagForeground: Color(0xFF334155),
+                    ),
+                  ],
+                ),
               ),
             ),
+          ],
+        ),
+        bottomNavigationBar: _orderedSection(
+          200,
+          _CalendarBottomBar(
+            onTap: (index) => _onNavTap(context, index),
+            onNowTap: () => _showNotImplemented(context),
           ),
-        ],
-      ),
-      bottomNavigationBar: _CalendarBottomBar(
-        onTap: (index) => _onNavTap(context, index),
-        onNowTap: () => _showNotImplemented(context),
+        ),
       ),
     );
   }
 }
 
 class _WeekdayLabel extends StatelessWidget {
-  const _WeekdayLabel(this.label);
+  const _WeekdayLabel(this.label, {required this.semanticLabel});
 
   final String label;
+  final String semanticLabel;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 32,
-      child: Text(
-        label,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: _mutedText,
+    return Semantics(
+      label: semanticLabel,
+      child: ExcludeSemantics(
+        child: Text(
+          label,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: _mutedText,
+          ),
         ),
       ),
     );
@@ -342,11 +463,11 @@ class _CalendarDay {
   });
 
   const _CalendarDay.empty()
-      : day = null,
-        date = null,
-        selected = false,
-        highlight = false,
-        showDot = false;
+    : day = null,
+      date = null,
+      selected = false,
+      highlight = false,
+      showDot = false;
 
   final int? day;
   final DateTime? date;
@@ -358,10 +479,14 @@ class _CalendarDay {
 class _CalendarCell extends StatelessWidget {
   const _CalendarCell({
     required this.day,
+    required this.semanticLabel,
+    required this.focusOrder,
     required this.onSelected,
   });
 
   final _CalendarDay day;
+  final String semanticLabel;
+  final double focusOrder;
   final VoidCallback onSelected;
 
   @override
@@ -377,38 +502,67 @@ class _CalendarCell extends StatelessWidget {
         : (highlight ? _chipTeal : Colors.transparent);
     final Color textColor = selected || highlight ? Colors.white : _mutedText;
 
-    return InkWell(
-      borderRadius: BorderRadius.circular(12),
-      onTap: onSelected,
-      child: Container(
-        decoration: BoxDecoration(
-          color: background,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Text(
-              '${day.day}',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: textColor,
+    return _orderedSection(
+      focusOrder,
+      Semantics(
+        container: true,
+        button: true,
+        selected: selected,
+        label: semanticLabel,
+        hint: selected ? 'Selected date' : 'Select date',
+        onTap: onSelected,
+        excludeSemantics: true,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+          child: TextButton(
+            onPressed: onSelected,
+            style: TextButton.styleFrom(
+              minimumSize: const Size(48, 48),
+              padding: EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
-            if (day.showDot)
-              Positioned(
-                bottom: 8,
-                child: Container(
-                  width: 4,
-                  height: 4,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
+            child: Center(
+              child: SizedBox(
+                width: 40,
+                height: 40,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: background,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      ExcludeSemantics(
+                        child: Text(
+                          '${day.day}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: textColor,
+                          ),
+                        ),
+                      ),
+                      if (day.showDot)
+                        Positioned(
+                          bottom: 7,
+                          child: Container(
+                            width: 4,
+                            height: 4,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),
-          ],
+            ),
+          ),
         ),
       ),
     );
@@ -468,10 +622,7 @@ class _ScheduleCard extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text(
                   time,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: _mutedText,
-                  ),
+                  style: const TextStyle(fontSize: 13, color: _mutedText),
                 ),
               ],
             ),
@@ -519,10 +670,7 @@ class _TagChip extends StatelessWidget {
 }
 
 class _CalendarBottomBar extends StatelessWidget {
-  const _CalendarBottomBar({
-    required this.onTap,
-    required this.onNowTap,
-  });
+  const _CalendarBottomBar({required this.onTap, required this.onNowTap});
 
   final ValueChanged<int> onTap;
   final VoidCallback onNowTap;
@@ -540,7 +688,7 @@ class _CalendarBottomBar extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Icon(Icons.schedule, color: Colors.white70, size: 18),
+              const Icon(Icons.schedule, color: _onHeaderSecondary, size: 18),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -559,30 +707,34 @@ class _CalendarBottomBar extends StatelessWidget {
                       spacing: 6,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: const [
-                        Icon(Icons.schedule, size: 12, color: Colors.white70),
+                        Icon(
+                          Icons.schedule,
+                          size: 12,
+                          color: _onHeaderSecondary,
+                        ),
                         Text(
                           '02:00 PM',
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: _onHeaderSecondary,
                             fontSize: 11,
                           ),
                         ),
                         Text(
                           '•',
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: _onHeaderSecondary,
                             fontSize: 11,
                           ),
                         ),
                         Icon(
                           Icons.local_hospital_outlined,
                           size: 12,
-                          color: Colors.white70,
+                          color: _onHeaderSecondary,
                         ),
                         Text(
                           'At clinic',
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: _onHeaderSecondary,
                             fontSize: 11,
                           ),
                         ),
@@ -595,9 +747,8 @@ class _CalendarBottomBar extends StatelessWidget {
                 onPressed: onNowTap,
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.zero,
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  minimumSize: const Size(48, 48),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                 ),
                 child: Row(
                   children: const [
