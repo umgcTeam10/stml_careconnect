@@ -1,0 +1,28 @@
+appId: com.example.stml_careconnect
+---
+- launchApp:
+    clearState: true
+- assertVisible: "CareConnect"
+- assertVisible: "Get Started"
+- tapOn: "Get Started"
+
+- extendedWaitUntil:
+    visible: "Choose Your Role"
+    timeout: 10000
+- tapOn:
+    point: "50%,36%"
+- tapOn: "Continue"
+
+- extendedWaitUntil:
+    visible: "Welcome Back"
+    timeout: 10000
+- swipe:
+    direction: UP
+- swipe:
+    direction: UP
+- tapOn: "Sign In"
+
+- extendedWaitUntil:
+    visible: "Log Wellness Check"
+    timeout: 10000
+- takeScreenshot: 00-onboarding-dashboard

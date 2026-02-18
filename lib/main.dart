@@ -10,6 +10,7 @@ import 'screens/profile_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/task_details_screen.dart';
 import 'screens/tasks_screen.dart';
+import 'screens/role_selection_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'theme/app_theme.dart';
 
@@ -30,6 +31,8 @@ class CareConnectApp extends StatelessWidget {
       initialRoute: AppRoutes.welcome,
       routes: {
         AppRoutes.welcome: (context) => const WelcomeScreen(),
+        AppRoutes.roleSelection: (context) =>
+            const RoleSelectionScreen(),
         AppRoutes.login: (context) => const LoginScreen(),
         AppRoutes.signup: (context) => const SignUpScreen(),
         AppRoutes.dashboard: (context) => const DashboardScreen(),

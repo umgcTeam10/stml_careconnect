@@ -1,0 +1,5 @@
+appId: com.example.stml_careconnect
+---
+- runFlow: flows/00_onboarding_to_dashboard.yaml
+- runFlow: flows/01_tabs_navigation_all_screens.yaml
+- runFlow: flows/02_health_logs_navigation.yaml

@@ -12,9 +12,63 @@ const _emergencyBg = Color(0xFFFFE9EC);
 class MessagesScreen extends StatelessWidget {
   const MessagesScreen({super.key});
 
-  void _showNotImplemented(BuildContext context) {
+  void _handleEmergencySOS(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Not implemented in Week 4')),
+      const SnackBar(
+        content: Text(
+          'Emergency SOS - This will immediately contact your emergency contacts and care team',
+        ),
+      ),
+    );
+  }
+
+  void _handleQuickContact(BuildContext context, String contactName) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Opening conversation with $contactName')),
+    );
+  }
+
+  void _handleSendMessage(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'Send Message - Feature coming soon to send your message',
+        ),
+      ),
+    );
+  }
+
+  void _handleQuickReply(BuildContext context, String reply) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Quick reply sent: $reply')));
+  }
+
+  void _handleMessageOpen(BuildContext context, String senderName) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Opening conversation with $senderName')),
+    );
+  }
+
+  void _handleAcknowledge(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Appointment reminder acknowledged')),
+    );
+  }
+
+  void _handleSnooze(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Reminder snoozed for 10 minutes')),
+    );
+  }
+
+  void _handleViewAppointment(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'Physical Therapy Appointment at 2:00 PM at clinic - Tap to view full details',
+        ),
+      ),
     );
   }
 
@@ -51,20 +105,28 @@ class MessagesScreen extends StatelessWidget {
               bottom: false,
               child: Row(
                 children: [
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
+                  Semantics(
+                    label: 'Back',
+                    hint: 'Navigate back to previous screen',
+                    button: true,
+                    child: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.arrow_back, color: Colors.white),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
                   ),
                   const SizedBox(width: 12),
-                  const Expanded(
-                    child: Text(
-                      'Messages',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Semantics(
+                      header: true,
+                      child: const Text(
+                        'Messages',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -78,146 +140,202 @@ class MessagesScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: _emergencyBg,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: _emergencyRed.withOpacity(0.3)),
-                    ),
-                    child: ElevatedButton.icon(
-                      onPressed: () => _showNotImplemented(context),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _emergencyRed,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                  Semantics(
+                    label: 'Emergency SOS',
+                    hint:
+                        'Double tap to immediately contact your emergency contacts and care team',
+                    button: true,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: _emergencyBg,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: _emergencyRed.withOpacity(0.3),
                         ),
-                        elevation: 0,
                       ),
-                      icon: const Icon(Icons.warning_outlined),
-                      label: const Text(
-                        'Emergency SOS',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                      child: ElevatedButton.icon(
+                        onPressed: () => _handleEmergencySOS(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: _emergencyRed,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 0,
+                        ),
+                        icon: ExcludeSemantics(
+                          child: const Icon(Icons.warning_outlined),
+                        ),
+                        label: ExcludeSemantics(
+                          child: const Text(
+                            'Emergency SOS',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 24),
-                  const Text(
-                    'Quick Contact',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                  Semantics(
+                    header: true,
+                    child: Text(
+                      'Quick Contact',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      _QuickContactAvatar(
-                        initials: 'SJ',
-                        name: 'Sarah',
-                        subtitle: 'Primary Care',
-                        onTap: () => _showNotImplemented(context),
-                      ),
-                      const SizedBox(width: 16),
-                      _QuickContactAvatar(
-                        initials: 'DM',
-                        name: 'Dr.',
-                        subtitle: 'Doctor',
-                        onTap: () => _showNotImplemented(context),
-                      ),
-                      const SizedBox(width: 16),
-                      _QuickContactAvatar(
-                        initials: 'NC',
-                        name: 'Nurse',
-                        subtitle: 'Home Care',
-                        onTap: () => _showNotImplemented(context),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: _cardBorder),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 16,
-                          offset: const Offset(0, 8),
+                  Semantics(
+                    label: 'Quick contacts list',
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        _QuickContactAvatar(
+                          initials: 'SJ',
+                          name: 'Sarah',
+                          subtitle: 'Primary Care',
+                          semanticLabel: 'Contact Sarah, Primary Care provider',
+                          semanticHint:
+                              'Double tap to open conversation with Sarah',
+                          onTap: () => _handleQuickContact(context, 'Sarah'),
+                        ),
+                        const SizedBox(width: 16),
+                        _QuickContactAvatar(
+                          initials: 'DM',
+                          name: 'Dr.',
+                          subtitle: 'Doctor',
+                          semanticLabel: 'Contact Doctor',
+                          semanticHint:
+                              'Double tap to open conversation with your doctor',
+                          onTap: () => _handleQuickContact(context, 'Doctor'),
+                        ),
+                        const SizedBox(width: 16),
+                        _QuickContactAvatar(
+                          initials: 'NC',
+                          name: 'Nurse',
+                          subtitle: 'Home Care',
+                          semanticLabel: 'Contact Nurse, Home Care provider',
+                          semanticHint:
+                              'Double tap to open conversation with your nurse',
+                          onTap: () => _handleQuickContact(context, 'Nurse'),
                         ),
                       ],
                     ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Type your message...',
-                              hintStyle: const TextStyle(
-                                color: _mutedText,
-                                fontSize: 14,
+                  ),
+                  const SizedBox(height: 24),
+                  Semantics(
+                    label: 'Message input',
+                    hint: 'Type your message here and tap send button to send',
+                    textField: true,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: _cardBorder),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 16,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ExcludeSemantics(
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: 'Type your message...',
+                                  hintStyle: const TextStyle(
+                                    color: _mutedText,
+                                    fontSize: 14,
+                                  ),
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.zero,
+                                ),
+                                onTap: () => _handleSendMessage(context),
                               ),
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.zero,
-                            ),
-                            onTap: () => _showNotImplemented(context),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Container(
-                          width: 44,
-                          height: 44,
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: IconButton(
-                            onPressed: () => _showNotImplemented(context),
-                            icon: const Icon(
-                              Icons.send,
-                              color: AppColors.primary,
-                              size: 20,
                             ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 12),
+                          Semantics(
+                            label: 'Send message',
+                            hint: 'Double tap to send your typed message',
+                            button: true,
+                            child: Container(
+                              width: 44,
+                              height: 44,
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: IconButton(
+                                onPressed: () => _handleSendMessage(context),
+                                icon: ExcludeSemantics(
+                                  child: const Icon(
+                                    Icons.send,
+                                    color: AppColors.primary,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      _QuickReplyChip(
-                        label: 'Yes',
-                        onTap: () => _showNotImplemented(context),
-                      ),
-                      const SizedBox(width: 8),
-                      _QuickReplyChip(
-                        label: 'On my way',
-                        onTap: () => _showNotImplemented(context),
-                      ),
-                      const SizedBox(width: 8),
-                      _QuickReplyChip(
-                        label: 'Call me',
-                        onTap: () => _showNotImplemented(context),
-                      ),
-                    ],
+                  Semantics(
+                    label: 'Quick reply options',
+                    child: Row(
+                      children: [
+                        _QuickReplyChip(
+                          label: 'Yes',
+                          semanticLabel: 'Quick reply: Yes',
+                          semanticHint:
+                              'Double tap to send Yes as a quick reply',
+                          onTap: () => _handleQuickReply(context, 'Yes'),
+                        ),
+                        const SizedBox(width: 8),
+                        _QuickReplyChip(
+                          label: 'On my way',
+                          semanticLabel: 'Quick reply: On my way',
+                          semanticHint:
+                              'Double tap to send On my way as a quick reply',
+                          onTap: () => _handleQuickReply(context, 'On my way'),
+                        ),
+                        const SizedBox(width: 8),
+                        _QuickReplyChip(
+                          label: 'Call me',
+                          semanticLabel: 'Quick reply: Call me',
+                          semanticHint:
+                              'Double tap to send Call me as a quick reply',
+                          onTap: () => _handleQuickReply(context, 'Call me'),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 24),
-                  const Text(
-                    'Recent Messages',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                  Semantics(
+                    header: true,
+                    child: Text(
+                      'Recent Messages',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -227,110 +345,151 @@ class MessagesScreen extends StatelessWidget {
                     message: 'Morning walk completed! Felt great today.',
                     time: '1 hour ago',
                     isUnread: false,
-                    onTap: () => _showNotImplemented(context),
+                    semanticLabel:
+                        'Message from Robert Martinez, 1 hour ago. Morning walk completed! Felt great today.',
+                    semanticHint:
+                        'Double tap to open conversation with Robert Martinez',
+                    onTap: () => _handleMessageOpen(context, 'Robert Martinez'),
                   ),
                   const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF8E6),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: const Color(0xFFFFE8B3)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 16,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: _lightBlue,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: const Icon(
-                                Icons.notifications_outlined,
-                                color: AppColors.primary,
-                                size: 18,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    'CareConnect',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    '2 hours ago',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: _mutedText,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        const Text(
-                          'Reminder: Physical therapy appointment at 2:00 PM',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black87,
+                  Semantics(
+                    label:
+                        'Appointment reminder from CareConnect, 2 hours ago. Physical therapy appointment at 2:00 PM',
+                    hint: 'Contains acknowledge and snooze buttons',
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFF8E6),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: const Color(0xFFFFE8B3)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 16,
+                            offset: const Offset(0, 8),
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: OutlinedButton(
-                                onPressed: () => _showNotImplemented(context),
-                                style: OutlinedButton.styleFrom(
-                                  foregroundColor: AppColors.primary,
-                                  side: const BorderSide(color: AppColors.primary),
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              ExcludeSemantics(
+                                child: Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    color: _lightBlue,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Icon(
+                                    Icons.notifications_outlined,
+                                    color: AppColors.primary,
+                                    size: 18,
                                   ),
                                 ),
-                                child: const Text('Acknowledge'),
                               ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: OutlinedButton(
-                                onPressed: () => _showNotImplemented(context),
-                                style: OutlinedButton.styleFrom(
-                                  foregroundColor: _mutedText,
-                                  side: const BorderSide(color: _cardBorder),
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: ExcludeSemantics(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: const [
+                                      Text(
+                                        'CareConnect',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                      SizedBox(height: 2),
+                                      Text(
+                                        '2 hours ago',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: _mutedText,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                child: const Text('Snooze 10 min'),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          ExcludeSemantics(
+                            child: const Text(
+                              'Reminder: Physical therapy appointment at 2:00 PM',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black87,
                               ),
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Semantics(
+                                  label: 'Acknowledge',
+                                  hint:
+                                      'Double tap to acknowledge this appointment reminder',
+                                  button: true,
+                                  child: OutlinedButton(
+                                    onPressed: () =>
+                                        _handleAcknowledge(context),
+                                    style: OutlinedButton.styleFrom(
+                                      foregroundColor: AppColors.primary,
+                                      side: const BorderSide(
+                                        color: AppColors.primary,
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    child: ExcludeSemantics(
+                                      child: const Text('Acknowledge'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Semantics(
+                                  label: 'Snooze 10 minutes',
+                                  hint:
+                                      'Double tap to snooze this reminder for 10 minutes',
+                                  button: true,
+                                  child: OutlinedButton(
+                                    onPressed: () => _handleSnooze(context),
+                                    style: OutlinedButton.styleFrom(
+                                      foregroundColor: _mutedText,
+                                      side: const BorderSide(
+                                        color: _cardBorder,
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    child: ExcludeSemantics(
+                                      child: const Text('Snooze 10 min'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -340,7 +499,11 @@ class MessagesScreen extends StatelessWidget {
                     message: 'Can you pick up my prescription this afternoon?',
                     time: '1 day ago',
                     isUnread: true,
-                    onTap: () => _showNotImplemented(context),
+                    semanticLabel:
+                        'Unread message from Robert Martinez, 1 day ago. Can you pick up my prescription this afternoon?',
+                    semanticHint:
+                        'Double tap to open conversation and respond to Robert Martinez',
+                    onTap: () => _handleMessageOpen(context, 'Robert Martinez'),
                   ),
                 ],
               ),
@@ -350,7 +513,7 @@ class MessagesScreen extends StatelessWidget {
       ),
       bottomNavigationBar: _BottomBar(
         onTap: (index) => _onNavTap(context, index),
-        onNowTap: () => _showNotImplemented(context),
+        onNowTap: () => _handleViewAppointment(context),
       ),
     );
   }
@@ -361,57 +524,69 @@ class _QuickContactAvatar extends StatelessWidget {
     required this.initials,
     required this.name,
     required this.subtitle,
+    required this.semanticLabel,
+    required this.semanticHint,
     required this.onTap,
   });
 
   final String initials;
   final String name;
   final String subtitle;
+  final String semanticLabel;
+  final String semanticHint;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Column(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Center(
-              child: Text(
-                initials,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+    return Semantics(
+      label: semanticLabel,
+      hint: semanticHint,
+      button: true,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Column(
+          children: [
+            ExcludeSemantics(
+              child: Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Center(
+                  child: Text(
+                    initials,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            name,
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
+            const SizedBox(height: 8),
+            ExcludeSemantics(
+              child: Text(
+                name,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            subtitle,
-            style: const TextStyle(
-              fontSize: 11,
-              color: _mutedText,
+            const SizedBox(height: 2),
+            ExcludeSemantics(
+              child: Text(
+                subtitle,
+                style: const TextStyle(fontSize: 11, color: _mutedText),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -420,30 +595,41 @@ class _QuickContactAvatar extends StatelessWidget {
 class _QuickReplyChip extends StatelessWidget {
   const _QuickReplyChip({
     required this.label,
+    required this.semanticLabel,
+    required this.semanticHint,
     required this.onTap,
   });
 
   final String label;
+  final String semanticLabel;
+  final String semanticHint;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: _cardBorder),
-        ),
-        child: Text(
-          label,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-            color: Colors.black87,
+    return Semantics(
+      label: semanticLabel,
+      hint: semanticHint,
+      button: true,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: _cardBorder),
+          ),
+          child: ExcludeSemantics(
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+            ),
           ),
         ),
       ),
@@ -458,6 +644,8 @@ class _MessageCard extends StatelessWidget {
     required this.message,
     required this.time,
     required this.isUnread,
+    required this.semanticLabel,
+    required this.semanticHint,
     required this.onTap,
   });
 
@@ -466,108 +654,119 @@ class _MessageCard extends StatelessWidget {
   final String message;
   final String time;
   final bool isUnread;
+  final String semanticLabel;
+  final String semanticHint;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: _cardBorder),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 16,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: _lightBlue,
-                borderRadius: BorderRadius.circular(22),
+    return Semantics(
+      label: semanticLabel,
+      hint: semanticHint,
+      button: true,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: _cardBorder),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 16,
+                offset: const Offset(0, 8),
               ),
-              child: Center(
-                child: Text(
-                  initials,
-                  style: const TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ExcludeSemantics(
+                child: Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: _lightBlue,
+                    borderRadius: BorderRadius.circular(22),
+                  ),
+                  child: Center(
+                    child: Text(
+                      initials,
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+              const SizedBox(width: 12),
+              Expanded(
+                child: ExcludeSemantics(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Text(
-                          name,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              name,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            time,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: _mutedText,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        message,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: _mutedText,
+                          height: 1.3,
+                        ),
+                      ),
+                      if (isUnread) ...[
+                        const SizedBox(height: 10),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Text(
+                            'Unread',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                      ),
-                      Text(
-                        time,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: _mutedText,
-                        ),
-                      ),
+                      ],
                     ],
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    message,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: _mutedText,
-                      height: 1.3,
-                    ),
-                  ),
-                  if (isUnread) ...[
-                    const SizedBox(height: 10),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Text(
-                        'Unread',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -575,10 +774,7 @@ class _MessageCard extends StatelessWidget {
 }
 
 class _BottomBar extends StatelessWidget {
-  const _BottomBar({
-    required this.onTap,
-    required this.onNowTap,
-  });
+  const _BottomBar({required this.onTap, required this.onNowTap});
 
   final ValueChanged<int> onTap;
   final VoidCallback onNowTap;
@@ -588,82 +784,100 @@ class _BottomBar extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          decoration: const BoxDecoration(
-            color: _headerColor,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
-          ),
-          child: Row(
-            children: [
-              const Icon(Icons.schedule, color: Colors.white70, size: 18),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Now: Physical Therapy Appointment',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
+        Semantics(
+          label: 'Current appointment: Physical Therapy at 2:00 PM at clinic',
+          hint: 'Double tap to view full appointment details',
+          button: true,
+          liveRegion: true,
+          child: InkWell(
+            onTap: onNowTap,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: const BoxDecoration(
+                color: _headerColor,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+              ),
+              child: Row(
+                children: [
+                  ExcludeSemantics(
+                    child: const Icon(
+                      Icons.schedule,
+                      color: Colors.white70,
+                      size: 18,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: ExcludeSemantics(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Now: Physical Therapy Appointment',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Wrap(
+                            spacing: 6,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: const [
+                              Icon(
+                                Icons.schedule,
+                                size: 12,
+                                color: Colors.white70,
+                              ),
+                              Text(
+                                '02:00 PM',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 11,
+                                ),
+                              ),
+                              Text(
+                                '•',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 11,
+                                ),
+                              ),
+                              Icon(
+                                Icons.local_hospital_outlined,
+                                size: 12,
+                                color: Colors.white70,
+                              ),
+                              Text(
+                                'At clinic',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Wrap(
-                      spacing: 6,
-                      crossAxisAlignment: WrapCrossAlignment.center,
+                  ),
+                  ExcludeSemantics(
+                    child: Row(
                       children: const [
-                        Icon(Icons.schedule, size: 12, color: Colors.white70),
-                        Text(
-                          '02:00 PM',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 11,
-                          ),
-                        ),
-                        Text(
-                          '•',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 11,
-                          ),
-                        ),
+                        Text('View', style: TextStyle(color: Colors.white)),
+                        SizedBox(width: 4),
                         Icon(
-                          Icons.local_hospital_outlined,
-                          size: 12,
-                          color: Colors.white70,
-                        ),
-                        Text(
-                          'At clinic',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 11,
-                          ),
+                          Icons.arrow_forward,
+                          size: 14,
+                          color: Colors.white,
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              TextButton(
-                onPressed: onNowTap,
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.zero,
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: Row(
-                  children: const [
-                    Text('View'),
-                    SizedBox(width: 4),
-                    Icon(Icons.arrow_forward, size: 14),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
         ),
         ColoredBox(
@@ -678,25 +892,27 @@ class _BottomBar extends StatelessWidget {
               backgroundColor: Colors.white,
               elevation: 0,
               onTap: onTap,
+              showSelectedLabels: true,
+              showUnselectedLabels: true,
               items: const [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined),
+                  icon: Icon(Icons.home_outlined, semanticLabel: 'Nav Home'),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.check_circle_outline),
+                  icon: Icon(Icons.check_circle_outline, semanticLabel: 'Nav Tasks'),
                   label: 'Tasks',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.calendar_today_outlined),
+                  icon: Icon(Icons.calendar_today_outlined, semanticLabel: 'Nav Calendar'),
                   label: 'Calendar',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.chat_bubble_outline),
+                  icon: Icon(Icons.chat_bubble_outline, semanticLabel: 'Nav Messages'),
                   label: 'Messages',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.person_outline),
+                  icon: Icon(Icons.person_outline, semanticLabel: 'Nav Profile'),
                   label: 'Profile',
                 ),
               ],
@@ -707,3 +923,6 @@ class _BottomBar extends StatelessWidget {
     );
   }
 }
+
+
+
