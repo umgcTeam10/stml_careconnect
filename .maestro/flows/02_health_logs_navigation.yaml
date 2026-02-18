@@ -1,0 +1,59 @@
+appId: com.example.stml_careconnect
+---
+- launchApp:
+    clearState: true
+- assertVisible: "CareConnect"
+- tapOn: "Log in"
+
+- extendedWaitUntil:
+    visible: "Welcome Back"
+    timeout: 10000
+- swipe:
+    direction: UP
+- swipe:
+    direction: UP
+- tapOn: "Sign In"
+
+- extendedWaitUntil:
+    visible: "Log Wellness Check"
+    timeout: 10000
+- tapOn: "Log Wellness Check"
+
+- extendedWaitUntil:
+    visible: "Health Logs"
+    timeout: 10000
+- takeScreenshot: 02-health-logs
+
+- tapOn:
+    point: "70%,99%"
+- tapOn:
+    point: "70%,96%"
+- extendedWaitUntil:
+    visible: "Recent Messages"
+    timeout: 10000
+- takeScreenshot: 02-health-to-messages
+
+- tapOn:
+    point: "10%,99%"
+- tapOn:
+    point: "10%,96%"
+- extendedWaitUntil:
+    visible: "Log Wellness Check"
+    timeout: 10000
+- takeScreenshot: 02-health-back-home-before-profile
+
+- tapOn:
+    point: "90%,99%"
+- tapOn:
+    point: "90%,96%"
+- takeScreenshot: 02-health-to-profile
+
+- tapOn:
+    point: "10%,99%"
+- tapOn:
+    point: "10%,96%"
+- extendedWaitUntil:
+    visible: "Log Wellness Check"
+    timeout: 10000
+- takeScreenshot: 02-health-to-home
+

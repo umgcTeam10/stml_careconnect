@@ -988,25 +988,27 @@ class _DashboardBottomBar extends StatelessWidget {
               backgroundColor: Colors.white,
               elevation: 0,
               onTap: onTap,
+              showSelectedLabels: true,
+              showUnselectedLabels: true,
               items: const [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined),
+                  icon: Icon(Icons.home_outlined, semanticLabel: 'Nav Home'),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.check_circle_outline),
+                  icon: Icon(Icons.check_circle_outline, semanticLabel: 'Nav Tasks'),
                   label: 'Tasks',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.calendar_today_outlined),
+                  icon: Icon(Icons.calendar_today_outlined, semanticLabel: 'Nav Calendar'),
                   label: 'Calendar',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.chat_bubble_outline),
+                  icon: Icon(Icons.chat_bubble_outline, semanticLabel: 'Nav Messages'),
                   label: 'Messages',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.person_outline),
+                  icon: Icon(Icons.person_outline, semanticLabel: 'Nav Profile'),
                   label: 'Profile',
                 ),
               ],
@@ -1017,3 +1019,6 @@ class _DashboardBottomBar extends StatelessWidget {
     );
   }
 }
+
+
+

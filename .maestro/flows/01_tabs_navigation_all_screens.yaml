@@ -1,0 +1,75 @@
+appId: com.example.stml_careconnect
+---
+- launchApp:
+    clearState: true
+- assertVisible: "CareConnect"
+- tapOn: "Log in"
+
+- extendedWaitUntil:
+    visible: "Welcome Back"
+    timeout: 10000
+- swipe:
+    direction: UP
+- swipe:
+    direction: UP
+- tapOn: "Sign In"
+
+- extendedWaitUntil:
+    visible: "Log Wellness Check"
+    timeout: 10000
+
+- tapOn:
+    point: "30%,99%"
+- tapOn:
+    point: "30%,96%"
+- extendedWaitUntil:
+    visible: "Upcoming"
+    timeout: 10000
+- assertVisible: "Tasks"
+- takeScreenshot: 01-tasks
+
+- tapOn:
+    point: "50%,99%"
+- tapOn:
+    point: "50%,96%"
+- extendedWaitUntil:
+    visible: "Today's Schedule"
+    timeout: 10000
+- assertVisible: "Calendar"
+- takeScreenshot: 01-calendar
+
+- tapOn:
+    point: "70%,99%"
+- tapOn:
+    point: "70%,96%"
+- extendedWaitUntil:
+    visible: "Recent Messages"
+    timeout: 10000
+- assertVisible: "Quick Contact"
+- takeScreenshot: 01-messages
+
+- tapOn:
+    point: "10%,99%"
+- tapOn:
+    point: "10%,96%"
+- extendedWaitUntil:
+    visible: "Log Wellness Check"
+    timeout: 10000
+- takeScreenshot: 01-back-home-before-profile
+
+- tapOn:
+    point: "90%,99%"
+- tapOn:
+    point: "90%,96%"
+- takeScreenshot: 01-profile
+
+- tapOn:
+    point: "10%,99%"
+- tapOn:
+    point: "10%,96%"
+- extendedWaitUntil:
+    visible: "Log Wellness Check"
+    timeout: 10000
+- assertVisible: "Log Wellness Check"
+- takeScreenshot: 01-home
+
